@@ -1,6 +1,5 @@
-package org.wei86609.osmanthus;
+package org.wei86609.osmanthus.event;
 
-import org.wei86609.osmanthus.event.Event;
 
 public interface EventListener {
 

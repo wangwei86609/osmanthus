@@ -44,6 +44,7 @@ public class OsmanthusTask implements Runnable{
     public void run() {
         try {
             if(flowEngine!=null){
+                event.setThreadId(Thread.currentThread().getName());
                 flowEngine.execute(event,nodeId);
             }
         } catch (Exception e) {

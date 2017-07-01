@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.wei86609.osmanthus.event.Event;
+import org.wei86609.osmanthus.event.EventListener;
 import org.wei86609.osmanthus.node.executor.EmptyNodeExecutor;
 import org.wei86609.osmanthus.node.executor.ParallelRuleExecutor;
 import org.wei86609.osmanthus.node.executor.RuleExecutor;
@@ -48,9 +49,9 @@ public class OsmanthusExecutor implements EventListener{
     }
 
     public boolean stop(){
+        executorService.shutdown();
         if(executorService.isTerminated()){
             System.out.println("Thread pool is terminated, will shutdown");
-            executorService.shutdown();
             return true;
         }
         return false;

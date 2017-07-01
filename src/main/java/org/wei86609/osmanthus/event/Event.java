@@ -13,6 +13,16 @@ public class Event {
 
     private String eventId;
 
+    private String threadId;
+
+    public String getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(String threadId) {
+        this.threadId = threadId;
+    }
+
     private MODEL model=MODEL.FIRST;
 
     public MODEL getModel() {
@@ -52,8 +62,8 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event [eventId=" + eventId + ", model=" + model + ", paramMaps="
-                + parameters + "]";
+        return "Event [eventId=" + eventId + ", threadId=" + threadId
+                + ", model=" + model + ", parameters=" + parameters + "]";
     }
 
     public Event createNewEvent(){

@@ -7,7 +7,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 public class Node {
 
     public static enum TYPE {
-        EMPTY,RULE,SPLIT,SET,CARD,PARALLEL
+        EMPTY,RULE,SPLIT,SET,CARD,PARALLEL,MERGE
     }
 
     private TYPE type;

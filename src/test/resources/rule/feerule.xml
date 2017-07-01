@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<general name="feerule" id="feerule">
+<ruleset name="feerule" id="feerule">
 	<rule id="step1" exclusive="true">
 		<condition><![CDATA[salary<=3500]]></condition>
 		<action><![CDATA[fee=-100]]></action>
@@ -32,4 +32,4 @@
 		<condition><![CDATA[salary>83500]]></condition>
 		<action><![CDATA[fee=(salary-3500)*0.45-13505]]></action>
 	</rule>
-</general>
+</ruleset>

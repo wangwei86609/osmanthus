@@ -62,11 +62,11 @@ public class ConfigurationBuilder {
         }
     }
 
-    public String loadOneFlow(String flowId) throws Exception{
+    public Node loadOneFlow(String flowId) throws Exception{
         Flow flow=flowFileTranslator.getNode(flowId);
         List<Node> rules =  ruleSetTranslator.getNodes();
         combinRules(flow,rules);
-        return flow.getNodes().get(0).getId();
+        return flow.getNodes().get(0);
     }
 
     private void combinRules(Flow flow,List<Node> rules){

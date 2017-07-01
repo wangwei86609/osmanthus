@@ -12,13 +12,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.wei86609.osmanthus.node.Constraint;
 import org.wei86609.osmanthus.node.End;
 import org.wei86609.osmanthus.node.Flow;
+import org.wei86609.osmanthus.node.Merge;
 import org.wei86609.osmanthus.node.Parallel;
 import org.wei86609.osmanthus.node.Rule;
 import org.wei86609.osmanthus.node.Split;
 import org.wei86609.osmanthus.node.Start;
 import org.wei86609.osmanthus.node.executor.ruleset.GeneralRuleSetExecutor;
-import org.wei86609.osmanthus.node.ruleset.CardRuleSet;
-import org.wei86609.osmanthus.node.ruleset.GeneralRuleSet;
+import org.wei86609.osmanthus.node.ruleset.RuleSet;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -79,7 +79,7 @@ public class FlowFileTranslator implements NodeTranslator<Flow>{
 
     private Flow loadFlowFromFile(File xmlfile) throws FileNotFoundException{
         XStream xs = new XStream();
-        xs.processAnnotations(new Class[]{Flow.class,Start.class,End.class,GeneralRuleSet.class,Rule.class,Split.class,Constraint.class,CardRuleSet.class,Parallel.class});
+        xs.processAnnotations(new Class[]{Flow.class,Start.class,End.class,RuleSet.class,Rule.class,Split.class,Constraint.class,Parallel.class,Merge.class});
         return (Flow)xs.fromXML(new FileInputStream(xmlfile));
     }
 

@@ -5,9 +5,9 @@ import org.wei86609.osmanthus.event.Event;
 import org.wei86609.osmanthus.node.Node;
 import org.wei86609.osmanthus.node.Node.TYPE;
 
-public interface NodeExecutor extends Executor<Node,Boolean>{
+public interface NodeExecutor extends Executor<Node,String>{
 
-    Boolean execute(Event event,Node node) throws Exception;
+    String execute(Event event,Node node) throws Exception;
 
     TYPE getType();
 

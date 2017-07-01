@@ -17,13 +17,8 @@ public class OsmanthusExecutorTest extends TestCase {
         try {
             OsmanthusExecutor executor=  new OsmanthusExecutor();
             executor.newEvent(event, null);
-            while(true){
-                Thread.sleep(1000);
-                if(executor.stop()){
-                    break;
-                }
-            }
-            System.out.println(event.getVars());
+            Thread.sleep(5000);
+           // executor.stop();
         } catch (Exception e) {
             e.printStackTrace();
         }

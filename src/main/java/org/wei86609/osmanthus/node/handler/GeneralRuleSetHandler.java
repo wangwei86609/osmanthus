@@ -6,16 +6,23 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.wei86609.osmanthus.node.Node;
 import org.wei86609.osmanthus.node.Node.TYPE;
 import org.wei86609.osmanthus.node.Rule;
+import org.wei86609.osmanthus.node.ruleset.RuleSet;
 
 public class GeneralRuleSetHandler implements RuleSetHandler{
 
-    public List<Rule> handle(List<Rule> ruleList) {
-        List<Rule> rules = removeInvalidRules(ruleList);
+    public void handle(RuleSet ruleSet) {
+        List<Rule> rules = removeInvalidRules(ruleSet.getRules());
         sortRulesByPriority(rules);
-       return rules;
+        setNextNode(ruleSet.getToNodeId(),rules);
+        ruleSet.setRules(rules);
+    }
+
+    private void setNextNode(String toNodeId,List<Rule> rules){
+        for(Rule rule:rules){
+            rule.setToNodeId(toNodeId);
+        }
     }
 
     private void sortRulesByPriority(List<Rule> rules) {
@@ -44,8 +51,8 @@ public class GeneralRuleSetHandler implements RuleSetHandler{
         return rules;
     }
 
-    public boolean accept(Node node) {
-        return TYPE.SET.equals(node.getType())||TYPE.CARD.equals(node.getType());
+    public boolean accept(RuleSet ruleSet) {
+        return TYPE.SET.equals(ruleSet.getType())||TYPE.CARD.equals(ruleSet.getType());
     }
 
 }

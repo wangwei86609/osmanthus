@@ -16,16 +16,16 @@ public class ParallelRuleExecutor implements NodeExecutor{
 
     private EventListener eventListener;
 
-    public Boolean execute(Event event, Node node) throws Exception {
+    public String execute(Event event, Node node) throws Exception {
         Parallel parallel=(Parallel)node;
-        logger.debug("Parallel["+node.getId()+"] of the flow["+event.getEventId()+"] has ["+parallel.getLines().size()+"] thread lines");
+        logger.debug("Parallel["+node.getId()+"] of the event {"+event.getEventId()+"} has ["+parallel.getLines().size()+"] thread lines");
         List<Line> lines=parallel.getLines();
         for(Line line:lines){
             if(eventListener!=null){
                 eventListener.newEvent(event.createNewEvent(), line.getToNodeId());
             }
         }
-        return true;
+        return null;
     }
 
     public TYPE getType() {

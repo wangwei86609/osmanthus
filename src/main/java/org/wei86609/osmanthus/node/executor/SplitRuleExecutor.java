@@ -13,21 +13,20 @@ public class SplitRuleExecutor implements NodeExecutor{
 
     private final static Logger logger = Logger.getLogger(SplitRuleExecutor.class);
 
-    public Boolean execute(Event event, Node node) throws Exception {
+    public String execute(Event event, Node node) throws Exception {
         Split split=(Split)node;
-        logger.debug("Split["+node.getId()+"] of the flow["+event.getEventId()+"] has ["+split.getConstraints().size()+"] Constraints");
+        logger.debug("Split["+node.getId()+"] of the event {"+event+"} has ["+split.getConstraints().size()+"] Constraints");
         for(Constraint c:split.getConstraints()){
             if(executeCondition(c.getCondition(),event)){
-                logger.debug("Split["+node.getId()+"] of the flow["+event.getEventId()+"] Constraint's condition ["+c.getCondition()+"] result is true, will link to Node["+c.getToNodeId()+"].");
-                split.setToNodeId(c.getToNodeId());
-                return true;
+                logger.debug("Split["+node.getId()+"] of the event {"+event+"} Constraint's condition ["+c.getCondition()+"] result is true, will link to Node["+c.getToNodeId()+"].");
+                return c.getToNodeId();
             }
         }
         if(StringUtils.isEmpty(split.getToNodeId())){
-            logger.error("The node["+node.getId()+"] of the flow["+event.getEventId()+"] Seems constraint's conditions are all mismatch.");
-            throw new Exception("The node["+node.getId()+"] of the flow["+event.getEventId()+"] Seems constraint's conditions are all mismatch.");
+            logger.error("The node["+node.getId()+"] of the event {"+event+"} Seems constraint's conditions are all mismatch.");
+            throw new Exception("The node["+node.getId()+"] of the event {"+event+"} Seems constraint's conditions are all mismatch.");
         }
-        return false;
+        return null;
     }
 
     protected boolean executeCondition(String condition, Event context) {

@@ -3,6 +3,7 @@ package org.wei86609.osmanthus.node.executor.ruleset;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.wei86609.osmanthus.event.Event;
 import org.wei86609.osmanthus.node.Node;
@@ -11,7 +12,7 @@ import org.wei86609.osmanthus.node.Rule;
 import org.wei86609.osmanthus.node.executor.NodeExecutor;
 import org.wei86609.osmanthus.node.executor.RuleExecutor;
 import org.wei86609.osmanthus.node.handler.RuleSetHandler;
-import org.wei86609.osmanthus.node.ruleset.GeneralRuleSet;
+import org.wei86609.osmanthus.node.ruleset.RuleSet;
 
 public class GeneralRuleSetExecutor implements NodeExecutor{
 
@@ -21,18 +22,17 @@ public class GeneralRuleSetExecutor implements NodeExecutor{
 
     private List<RuleSetHandler> ruleSetHandlers;
 
-    public Boolean execute(Event event,Node node) throws Exception{
-        GeneralRuleSet ruleSet=(GeneralRuleSet)node;
-        List<Rule> rules=ruleSet.getRules();
+    public String execute(Event event,Node node) throws Exception{
+        RuleSet ruleSet=(RuleSet)node;
         for(int i=0;i<ruleSetHandlers.size();i++){
             RuleSetHandler ruleSetHandler=ruleSetHandlers.get(i);
             if(ruleSetHandler.accept(ruleSet)){
-                rules=ruleSetHandler.handle(ruleSet.getRules());
+                ruleSetHandler.handle(ruleSet);
             }
         }
-        logger.debug("The ruleset["+node.getId()+"] of the flow["+event.getEventId()+"] has ["+ruleSet.getRules().size()+"] rules");
-        run(event,rules);
-        return true;
+        logger.debug("The ruleset["+node.getId()+"] of the event{"+event+"} has ["+ruleSet.getRules().size()+"] rules");
+        run(event,ruleSet.getRules());
+        return ruleSet.getToNodeId();
     }
 
     /**
@@ -50,15 +50,18 @@ public class GeneralRuleSetExecutor implements NodeExecutor{
        }
        boolean success=false;
        try {
-           success=ruleExecutor.execute(event,rule);
+           String res=ruleExecutor.execute(event,rule);
+           if(StringUtils.isNotEmpty(res)){
+               success=true;
+           }
        } catch (Exception e) {
-           logger.error("The node["+rule.getId()+"] of the flow["+event.getEventId()+"] occurs exception.",e);
+           logger.error("The node["+rule.getId()+"] of the event {"+event+"} occurs exception.",e);
            if(!ruleList.isEmpty()){
                ruleList.remove(0);
            }
        }
        if (success && rule.isExclusive()) {
-           logger.debug("The node["+rule.getId()+"] of the flow["+event.getEventId()+"] is exclusive, remain nodes will not be executed.");
+           logger.debug("The node["+rule.getId()+"] of the event {"+event+"} is exclusive, remain nodes will not be executed.");
           return;
        }
 

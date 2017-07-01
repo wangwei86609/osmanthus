@@ -1,14 +1,11 @@
 package org.wei86609.osmanthus.node.handler;
 
-import java.util.List;
-
 import org.wei86609.osmanthus.Accepter;
-import org.wei86609.osmanthus.node.Node;
-import org.wei86609.osmanthus.node.Rule;
+import org.wei86609.osmanthus.node.ruleset.RuleSet;
 
-public interface RuleSetHandler extends Accepter<Node>{
+public interface RuleSetHandler extends Accepter<RuleSet>{
 
-    public List<Rule> handle(List<Rule> rules);
+    public void handle(RuleSet ruleSet);
 
-    public boolean accept(Node ruleSet);
+    public boolean accept(RuleSet ruleSet);
 }

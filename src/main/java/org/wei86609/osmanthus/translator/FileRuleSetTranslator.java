@@ -12,8 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.wei86609.osmanthus.node.Node;
 import org.wei86609.osmanthus.node.Rule;
 import org.wei86609.osmanthus.node.executor.ruleset.GeneralRuleSetExecutor;
-import org.wei86609.osmanthus.node.ruleset.CardRuleSet;
-import org.wei86609.osmanthus.node.ruleset.GeneralRuleSet;
+import org.wei86609.osmanthus.node.ruleset.RuleSet;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -74,7 +73,7 @@ public class FileRuleSetTranslator implements NodeTranslator<Node>{
 
     private Node loadRuleSetFromFile(File xmlfile) throws FileNotFoundException{
         XStream xs = new XStream();
-        xs.processAnnotations(new Class[]{GeneralRuleSet.class,Rule.class,CardRuleSet.class});
+        xs.processAnnotations(new Class[]{RuleSet.class,Rule.class});
         return (Node)xs.fromXML(new FileInputStream(xmlfile));
     }
 

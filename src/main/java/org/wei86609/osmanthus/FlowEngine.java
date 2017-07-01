@@ -34,33 +34,27 @@ public class FlowEngine{
     }
 
     public Boolean execute(Event event,String nodeId) throws Exception {
-        logger.debug("Osmanthus start to execute the event["+event.toString()+"]");
-        String firstNodeId=ConfigurationBuilder.getBuilder().loadOneFlow(event.getEventId());
+        logger.debug("Osmanthus start to execute the event["+event+"]");
+        Node firstNode=ConfigurationBuilder.getBuilder().loadOneFlow(event.getEventId());
         if(StringUtils.isBlank(nodeId)){
-            nodeId=firstNodeId;
-            logger.debug("Node is blank, will get the first node["+nodeId+"] of flow to execute.");
+            nodeId=firstNode.getId();
+            logger.debug("Node is blank, will get the first node ["+nodeId+"] of flow to execute.");
         }
         runFlowNode(event,nodeId);
-        logger.debug("Osmanthus execute the event["+event.getEventId()+"] end");
+        logger.debug("Osmanthus execute the event {"+event+"} end");
         return true;
     }
 
     private void runFlowNode(Event event,String nodeId)throws Exception{
         if(StringUtils.isBlank(nodeId)){
-            logger.debug("Node["+nodeId+"] is blank, its event["+event+"]");
             return;
         }
         Node node=ConfigurationBuilder.getBuilder().getAvaiableNodes().get(nodeId);
         if(node==null){
             return;
         }
-        logger.debug("Node["+nodeId+"] of the flow["+event.getEventId()+"] start to run");
-        boolean succ= nodeExecutorMap.get(node.getType()).execute(event, node);
-        if(!succ){
-            logger.error("The node["+nodeId+"] of the flow["+event.getEventId()+"] execute failure");
-            throw new Exception("The node["+nodeId+"] of the flow["+event.getEventId()+"] execute failure");
-        }
-        runFlowNode(event,node.getToNodeId());
+        String nextNodeId= nodeExecutorMap.get(node.getType()).execute(event, node);
+        runFlowNode(event,nextNodeId);
     }
 
 

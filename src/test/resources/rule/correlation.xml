@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<general name="correlation" id="correlation">
+<ruleset name="correlation" id="correlation">
     <rule id="cor1" priority="0" exclusive="true">
         <condition><![CDATA[salary>3500]]></condition>
         <action><![CDATA[result='pass']]></action>
@@ -16,4 +16,4 @@
 		<condition><![CDATA[weight<=500]]></condition>
 		<action><![CDATA[result='failure']]></action>
 	</rule>
-</general>
+</ruleset>

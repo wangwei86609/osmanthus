@@ -9,9 +9,9 @@ public class EmptyNodeExecutor implements NodeExecutor{
 
     private final static Logger logger = Logger.getLogger(EmptyNodeExecutor.class);
 
-    public Boolean execute(Event event, Node node) throws Exception {
-        logger.debug("The empty node["+node.getId()+"] of the flow["+event.getEventId()+"] executed.");
-        return true;
+    public String execute(Event event, Node node) throws Exception {
+        logger.debug("The empty node["+node.getId()+"] of the event{"+event+"} executed.");
+        return node.getToNodeId();
     }
 
     public TYPE getType() {

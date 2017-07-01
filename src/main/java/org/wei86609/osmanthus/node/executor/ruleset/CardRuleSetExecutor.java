@@ -30,7 +30,7 @@ public class CardRuleSetExecutor implements NodeExecutor{
                 rules=ruleSetHandler.handle(ruleSet.getRules());
             }
         }
-        logger.debug("The ruleset["+node.getId()+"] of the flow["+event.getFlowId()+"] has ["+ruleSet.getRules().size()+"] rules");
+        logger.debug("The ruleset["+node.getId()+"] of the flow["+event.getEventId()+"] has ["+ruleSet.getRules().size()+"] rules");
         run(event,rules);
         return true;
     }
@@ -52,13 +52,13 @@ public class CardRuleSetExecutor implements NodeExecutor{
        try {
            success=ruleExecutor.execute(event,rule);
        } catch (Exception e) {
-           logger.error("The node["+rule.getId()+"] of the flow["+event.getFlowId()+"] occurs exception.",e);
+           logger.error("The node["+rule.getId()+"] of the flow["+event.getEventId()+"] occurs exception.",e);
            if(!ruleList.isEmpty()){
                ruleList.remove(0);
            }
        }
        if (success && rule.isExclusive()) {
-           logger.debug("The node["+rule.getId()+"] of the flow["+event.getFlowId()+"] is exclusive, remain nodes will not be executed.");
+           logger.debug("The node["+rule.getId()+"] of the flow["+event.getEventId()+"] is exclusive, remain nodes will not be executed.");
            return;
        }
 

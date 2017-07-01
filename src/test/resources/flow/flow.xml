@@ -4,12 +4,24 @@
     <general id="feerule" fromNodeId="start" toNodeId="split1" external="true"/>
     <split id="split1" fromNodeId="feerule">
         <constraint toNodeId="card">
-            <condition><![CDATA[fee<=1]]></condition>
-        </constraint>
-        <constraint toNodeId="end">
             <condition><![CDATA[fee>1]]></condition>
         </constraint>
+        <constraint toNodeId="end">
+            <condition><![CDATA[fee<=1]]></condition>
+        </constraint>
     </split>
-    <card id="card" fromNodeId="split1" toNodeId="end" external="true"/>
+    <card id="card" fromNodeId="split1" toNodeId="mlines" external="true"/>
+    <parallel id="mlines" fromNodeId="card">
+        <line toNodeId="p1"/>
+        <line toNodeId="p2"/>
+    </parallel>
+    <rule id="p1" fromNodeId="mlines" toNodeId="end">
+        <condition><![CDATA[1==1]]></condition>
+        <action><![CDATA[rule1="p1"]]></action>
+    </rule>
+    <rule id="p2" fromNodeId="mlines" toNodeId="end">
+        <condition><![CDATA[2==2]]></condition>
+        <action><![CDATA[rule2="p2"]]></action>
+    </rule>
     <end id="end"/>
 </flow>

@@ -10,7 +10,7 @@ public class EmptyNodeExecutor implements NodeExecutor{
     private final static Logger logger = Logger.getLogger(EmptyNodeExecutor.class);
 
     public Boolean execute(Event event, Node node) throws Exception {
-        logger.debug("The empty node["+node.getId()+"] of the flow["+event.getFlowId()+"] executed.");
+        logger.debug("The empty node["+node.getId()+"] of the flow["+event.getEventId()+"] executed.");
         return true;
     }
 

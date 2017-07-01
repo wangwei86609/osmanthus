@@ -11,7 +11,7 @@ public class Event {
         FIRST,LAST,WEIGHT
     }
 
-    private String flowId;
+    private String eventId;
 
     private MODEL model=MODEL.FIRST;
 
@@ -23,37 +23,44 @@ public class Event {
         this.model = model;
     }
 
-    public String getFlowId() {
-        return flowId;
+    public String getEventId() {
+        return eventId;
     }
 
-    public void setFlowId(String flowId) {
-        this.flowId = flowId;
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
-    private final Map<String, Object> paramMaps = new HashMap<String, Object>();
+    private final Map<String, Object> parameters = new HashMap<String, Object>();
 
     public void add(String key, Object value) {
         if (!StringUtils.isEmpty(key)) {
-            paramMaps.put(key, value);
+            parameters.put(key, value);
         }
     }
 
     public Object get(String key) {
         if (!StringUtils.isEmpty(key)) {
-            return paramMaps.get(key);
+            return parameters.get(key);
         }
         return null;
     }
 
     public Map<String, Object> getVars() {
-        return paramMaps;
+        return parameters;
     }
 
     @Override
     public String toString() {
-        return "Event [flowId=" + flowId + ", model=" + model + ", paramMaps="
-                + paramMaps + "]";
+        return "Event [eventId=" + eventId + ", model=" + model + ", paramMaps="
+                + parameters + "]";
     }
 
+    public Event createNewEvent(){
+        Event event=new Event();
+        event.setEventId(this.getEventId());
+        event.setModel(this.getModel());
+        event.getVars().putAll(this.getVars());
+        return event;
+    }
 }

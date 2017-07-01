@@ -7,6 +7,7 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 @XStreamAlias("split")
 public class Split extends Node{
+
     @XStreamImplicit
     private List<Constraint> constraints;
 

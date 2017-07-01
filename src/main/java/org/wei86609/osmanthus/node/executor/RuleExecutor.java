@@ -19,7 +19,7 @@ public class RuleExecutor implements NodeExecutor {
         Rule rule=(Rule)node;
         boolean success=executeCondition(rule,event);
         if(success){
-            logger.debug("The node["+node.getId()+"] of the flow["+event.getFlowId()+"] condition=["+rule.getCondition()+"] is true and action=["+rule.getAction()+"]");
+            logger.debug("The node["+node.getId()+"] of the flow["+event.getEventId()+"] condition=["+rule.getCondition()+"] is true and action=["+rule.getAction()+"]");
             executeAction(rule,event);
         }
         return success;

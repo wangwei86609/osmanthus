@@ -3,6 +3,7 @@ package org.wei86609.osmanthus.node.executor.ruleset;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.wei86609.osmanthus.event.Event;
 import org.wei86609.osmanthus.node.Node;
 import org.wei86609.osmanthus.node.Node.TYPE;
@@ -10,17 +11,18 @@ import org.wei86609.osmanthus.node.Rule;
 import org.wei86609.osmanthus.node.executor.NodeExecutor;
 import org.wei86609.osmanthus.node.executor.RuleExecutor;
 import org.wei86609.osmanthus.node.handler.RuleSetHandler;
-import org.wei86609.osmanthus.node.ruleset.GeneralRuleSet;
+import org.wei86609.osmanthus.node.ruleset.CardRuleSet;
 
 public class CardRuleSetExecutor implements NodeExecutor{
 
+    private final static Logger logger = Logger.getLogger(CardRuleSetExecutor.class);
 
     private RuleExecutor ruleExecutor;
 
     private List<RuleSetHandler> ruleSetHandlers;
 
-    public Boolean execute(Event context,Node node) throws Exception{
-        GeneralRuleSet ruleSet=(GeneralRuleSet)node;
+    public Boolean execute(Event event,Node node) throws Exception{
+        CardRuleSet ruleSet=(CardRuleSet)node;
         List<Rule> rules=ruleSet.getRules();
         for(int i=0;i<ruleSetHandlers.size();i++){
             RuleSetHandler ruleSetHandler=ruleSetHandlers.get(i);
@@ -28,7 +30,8 @@ public class CardRuleSetExecutor implements NodeExecutor{
                 rules=ruleSetHandler.handle(ruleSet.getRules());
             }
         }
-        run(context,rules);
+        logger.debug("The ruleset["+node.getId()+"] of the flow["+event.getFlowId()+"] has ["+ruleSet.getRules().size()+"] rules");
+        run(event,rules);
         return true;
     }
 
@@ -37,7 +40,7 @@ public class CardRuleSetExecutor implements NodeExecutor{
      * @param context
      * @param ruleSet
      */
-    protected void run(Event context, List<Rule> ruleList) {
+    protected void run(Event event, List<Rule> ruleList) {
        if(ruleList==null ||ruleList.isEmpty()){
            return;
        }
@@ -45,27 +48,27 @@ public class CardRuleSetExecutor implements NodeExecutor{
        if(rule==null){
            return;
        }
+       boolean success=false;
        try {
-           ruleExecutor.execute(context,rule);
+           success=ruleExecutor.execute(event,rule);
        } catch (Exception e) {
-           e.printStackTrace();
+           logger.error("The node["+rule.getId()+"] of the flow["+event.getFlowId()+"] occurs exception.",e);
            if(!ruleList.isEmpty()){
                ruleList.remove(0);
            }
        }
-       if (rule.isExclusive()) {
-          return;
+       if (success && rule.isExclusive()) {
+           logger.debug("The node["+rule.getId()+"] of the flow["+event.getFlowId()+"] is exclusive, remain nodes will not be executed.");
+           return;
        }
 
-       if (rule.getMultipleTimes()<=0) {
-           if(!ruleList.isEmpty()){
-               ruleList.remove(0);
-           }
+       if (rule.getMultipleTimes()<=0 && !ruleList.isEmpty()) {
+           ruleList.remove(0);
        }else{
            int times=rule.getMultipleTimes();
            rule.setMultipleTimes(--times);
        }
-       run(context,ruleList);
+       run(event,ruleList);
     }
 
     public void addRuleSetHandler(RuleSetHandler ruleSetHandler){
@@ -81,6 +84,14 @@ public class CardRuleSetExecutor implements NodeExecutor{
 
     public void setRuleSetHandlers(List<RuleSetHandler> ruleSetHandlers) {
         this.ruleSetHandlers = ruleSetHandlers;
+    }
+
+    public RuleExecutor getRuleExecutor() {
+        return ruleExecutor;
+    }
+
+    public void setRuleExecutor(RuleExecutor ruleExecutor) {
+        this.ruleExecutor = ruleExecutor;
     }
 
     public TYPE getType() {

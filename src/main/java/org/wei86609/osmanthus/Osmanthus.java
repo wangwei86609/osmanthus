@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.wei86609.osmanthus.event.Event;
+import org.wei86609.osmanthus.event.Event.MODEL;
 import org.wei86609.osmanthus.node.Flow;
 import org.wei86609.osmanthus.node.Node;
 import org.wei86609.osmanthus.node.Node.TYPE;
@@ -13,7 +15,9 @@ import org.wei86609.osmanthus.node.executor.NodeExecutor;
 import org.wei86609.osmanthus.translator.FileRuleSetTranslator;
 import org.wei86609.osmanthus.translator.FlowFileTranslator;
 
-public class FlowEngine implements Executor<String,Boolean>{
+public class Osmanthus{
+
+    private final static Logger logger = Logger.getLogger(Osmanthus.class);
 
     private FileRuleSetTranslator ruleSetTranslator;
 
@@ -32,6 +36,13 @@ public class FlowEngine implements Executor<String,Boolean>{
         }
     }
 
+    public void addNodeExecutor(NodeExecutor nodeExecutor){
+        if(nodeExecutorMap==null){
+            nodeExecutorMap=new HashMap<TYPE,NodeExecutor>();
+        }
+        nodeExecutorMap.put(nodeExecutor.getType(), nodeExecutor);
+    }
+
     public FileRuleSetTranslator getRuleSetTranslator() {
         return ruleSetTranslator;
     }
@@ -48,16 +59,19 @@ public class FlowEngine implements Executor<String,Boolean>{
         this.flowFileTranslator = flowFileTranslator;
     }
 
-    public Boolean execute(Event context,String flowId) throws Exception {
-        Flow flow=flowFileTranslator.getNode(flowId);
+    public Boolean execute(Event event) throws Exception {
+        logger.error("Osmanthus begin to execute the event["+event.toString()+"]");
+        Flow flow=flowFileTranslator.getNode(event.getFlowId());
         if(flow==null || flow.getNodes()==null ||flow.getNodes().isEmpty()){
             return false;
+        }
+        if(StringUtils.isNoneBlank(flow.getModel())){
+            event.setModel(MODEL.valueOf(flow.getModel()));
         }
         List<Node> rules=  ruleSetTranslator.getNodes();
         List<Node> flowNodes=flow.getNodes();
         combinRulesAndFlowNodes(rules,flowNodes);
-        runFlowNode(context,flowNodes.get(0).getId());
-
+        runFlowNode(event,flowNodes.get(0).getId());
         return true;
     }
 
@@ -69,6 +83,8 @@ public class FlowEngine implements Executor<String,Boolean>{
                 if(rule==null){
                     throw new Exception("External file dont find the rule ["+fn.getId()+"]");
                 }
+                rule.setFromNodeId(fn.getFromNodeId());
+                rule.setToNodeId(fn.getToNodeId());
                 avaNodes.put(fn.getId(), rule);
             }else{
                 avaNodes.put(fn.getId(), fn);
@@ -77,7 +93,7 @@ public class FlowEngine implements Executor<String,Boolean>{
         avaiableNodes.set(avaNodes);
     }
 
-    private void runFlowNode(Event context,String nodeId)throws Exception{
+    private void runFlowNode(Event event,String nodeId)throws Exception{
         if(StringUtils.isBlank(nodeId)){
             return;
         }
@@ -85,11 +101,12 @@ public class FlowEngine implements Executor<String,Boolean>{
             return;
         }
         Node node=avaiableNodes.get().get(nodeId);
-        boolean succ= nodeExecutorMap.get(node.getType()).execute(context, node);
+        boolean succ= nodeExecutorMap.get(node.getType()).execute(event, node);
         if(!succ){
-            throw new Exception("In the flow [], flow engine occurs exception of the node ["+node.getName()+"]");
+            logger.error("The node["+nodeId+"] of the flow["+event.getFlowId()+"] execute failure");
+            throw new Exception("The node["+nodeId+"] of the flow["+event.getFlowId()+"] execute failure");
         }
-        runFlowNode(context,node.getToNodeId());
+        runFlowNode(event,node.getToNodeId());
     }
 
     private Node getRuleById(List<Node> rules,String id){

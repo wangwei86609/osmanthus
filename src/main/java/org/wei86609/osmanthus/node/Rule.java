@@ -43,7 +43,7 @@ public class Rule extends Node{
 
     @Override
     public String toString() {
-        return "MvelRule [condition=" + this.getCondition() + ", action=" + this.getAction() + ", type=" + getType() + ", id=" + getId()
+        return "Rule [condition=" + this.getCondition() + ", action=" + this.getAction() + ", type=" + getType() + ", id=" + getId()
                 + ", priority=" + getPriority() + ", multipleTimes=" + getMultipleTimes() + ",exclusive=" + isExclusive()
                 + "]";
     }

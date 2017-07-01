@@ -1,6 +1,7 @@
 package org.wei86609.osmanthus.node.executor;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.mvel2.MVEL;
 import org.wei86609.osmanthus.event.Event;
 import org.wei86609.osmanthus.node.Constraint;
@@ -10,16 +11,21 @@ import org.wei86609.osmanthus.node.Split;
 
 public class SplitRuleExecutor implements NodeExecutor{
 
-    public Boolean execute(Event context, Node node) throws Exception {
+    private final static Logger logger = Logger.getLogger(SplitRuleExecutor.class);
+
+    public Boolean execute(Event event, Node node) throws Exception {
         Split split=(Split)node;
+        logger.debug("The node["+node.getId()+"] of the flow["+event.getFlowId()+"] has ["+split.getConstraints().size()+"] Constraints");
         for(Constraint c:split.getConstraints()){
-            if(executeCondition(c.getCondition(),context)){
+            if(executeCondition(c.getCondition(),event)){
+                logger.debug("The node["+node.getId()+"] of the flow["+event.getFlowId()+"] Constraint's condition ["+c.getCondition()+"] result is true, will link to Node["+c.getToNodeId()+"].");
                 split.setToNodeId(c.getToNodeId());
                 return true;
             }
         }
         if(StringUtils.isEmpty(split.getToNodeId())){
-            throw new Exception("Seems constraint's conditions all mismatch.");
+            logger.error("The node["+node.getId()+"] of the flow["+event.getFlowId()+"] Seems constraint's conditions are all mismatch.");
+            throw new Exception("The node["+node.getId()+"] of the flow["+event.getFlowId()+"] Seems constraint's conditions are all mismatch.");
         }
         return false;
     }

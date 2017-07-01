@@ -27,7 +27,7 @@ public class FlowFileTranslator implements NodeTranslator<Flow>{
 
     private String flowFolderName="flow";
 
-    private String flowFileExtension=".fl";
+    private String flowFileExtension=".xml";
 
     public String getFlowFolder() {
         return flowFolder;

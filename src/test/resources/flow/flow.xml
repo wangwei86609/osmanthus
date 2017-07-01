@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow id="flow1">
+    <start id="start" toNodeId="feerule"/>
+    <general id="feerule" fromNodeId="start" toNodeId="split1" external="true"/>
+    <split id="split1" fromNodeId="feerule">
+        <constraint toNodeId="card">
+            <condition><![CDATA[fee<=1]]></condition>
+        </constraint>
+        <constraint toNodeId="end">
+            <condition><![CDATA[fee>1]]></condition>
+        </constraint>
+    </split>
+    <card id="card" fromNodeId="split1" toNodeId="end" external="true"/>
+    <end id="end"/>
+</flow>

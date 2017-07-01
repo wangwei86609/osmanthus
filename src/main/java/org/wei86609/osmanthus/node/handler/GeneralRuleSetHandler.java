@@ -6,9 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.wei86609.osmanthus.node.Node;
 import org.wei86609.osmanthus.node.Node.TYPE;
 import org.wei86609.osmanthus.node.Rule;
-import org.wei86609.osmanthus.node.ruleset.GeneralRuleSet;
 
 public class GeneralRuleSetHandler implements RuleSetHandler{
 
@@ -44,8 +44,8 @@ public class GeneralRuleSetHandler implements RuleSetHandler{
         return rules;
     }
 
-    public boolean accept(GeneralRuleSet ruleSet) {
-        return TYPE.SET.equals(ruleSet.getType());
+    public boolean accept(Node node) {
+        return TYPE.SET.equals(node.getType())||TYPE.CARD.equals(node.getType());
     }
 
 }

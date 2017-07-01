@@ -20,6 +20,6 @@ public class Split extends Node{
 
     @Override
     public TYPE getType() {
-        return TYPE.RULE;
+        return TYPE.SPLIT;
     }
 }

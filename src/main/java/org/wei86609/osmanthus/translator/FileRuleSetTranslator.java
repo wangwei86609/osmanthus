@@ -23,7 +23,7 @@ public class FileRuleSetTranslator implements NodeTranslator<Node>{
 
     private String ruleSetFolderName="rule";
 
-    private String ruleFileExtension=".rs";
+    private String ruleFileExtension=".xml";
 
     public String getRuleFileExtension() {
         return ruleFileExtension;

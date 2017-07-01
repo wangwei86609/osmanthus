@@ -19,9 +19,21 @@
         <condition><![CDATA[1==1]]></condition>
         <action><![CDATA[rule1="p1"]]></action>
     </rule>
-    <rule id="p2" fromNodeId="mlines" toNodeId="end">
+    <rule id="p2" fromNodeId="mlines" toNodeId="mlines2">
         <condition><![CDATA[2==2]]></condition>
         <action><![CDATA[rule2="p2"]]></action>
+    </rule>
+    <parallel id="mlines2" fromNodeId="p2">
+        <line toNodeId="p3"/>
+        <line toNodeId="p4"/>
+    </parallel>
+    <rule id="p3" fromNodeId="mlines2" toNodeId="end">
+        <condition><![CDATA[1==1]]></condition>
+        <action><![CDATA[rule3="p3"]]></action>
+    </rule>
+    <rule id="p4" fromNodeId="mlines2" toNodeId="end">
+        <condition><![CDATA[2==2]]></condition>
+        <action><![CDATA[rule4="p4"]]></action>
     </rule>
     <end id="end"/>
 </flow>

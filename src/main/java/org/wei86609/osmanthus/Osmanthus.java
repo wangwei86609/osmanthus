@@ -60,7 +60,7 @@ public class Osmanthus{
     }
 
     public Boolean execute(Event event) throws Exception {
-        logger.error("Osmanthus begin to execute the event["+event.toString()+"]");
+        logger.debug("Osmanthus begin to execute the event["+event.toString()+"]");
         Flow flow=flowFileTranslator.getNode(event.getFlowId());
         if(flow==null || flow.getNodes()==null ||flow.getNodes().isEmpty()){
             return false;

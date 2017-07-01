@@ -9,7 +9,7 @@
     </appender>   
   
     <appender name="DEBUG" class="org.apache.log4j.DailyRollingFileAppender">   
-        <param name="File" value="/logs/osmanthus/debug.log"/>   
+        <param name="File" value="./logs/osmanthus/debug.log"/>   
         <param name="Append" value="true"/>     
         <layout class="org.apache.log4j.PatternLayout">   
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} - %p - (%F:%L) - %m%n"/>   
@@ -21,7 +21,7 @@
     </appender>   
   
     <appender name="INFO" class="org.apache.log4j.DailyRollingFileAppender">   
-        <param name="File" value="/logs/osmanthus/info.log"/>   
+        <param name="File" value="./logs/osmanthus/info.log"/>   
         <param name="Append" value="true"/>  
         <layout class="org.apache.log4j.PatternLayout">   
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} - %p - (%F:%L) - %m%n"/>   
@@ -33,7 +33,7 @@
     </appender>   
   
     <appender name="WARN" class="org.apache.log4j.DailyRollingFileAppender">   
-        <param name="File" value="/logs/osmanthus/warn.log"/>   
+        <param name="File" value="./logs/osmanthus/warn.log"/>   
         <param name="Append" value="true"/>
         <layout class="org.apache.log4j.PatternLayout">   
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} - %p - (%F:%L) - %m%n"/>   
@@ -45,7 +45,7 @@
     </appender>   
   
     <appender name="ERROR" class="org.apache.log4j.DailyRollingFileAppender">   
-        <param name="File" value="/logs/osmanthus/error.log"/>   
+        <param name="File" value="./logs/osmanthus/error.log"/>   
         <param name="Append" value="true"/> 
         <layout class="org.apache.log4j.PatternLayout">   
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} - %p - (%F:%L) - %m%n"/>   

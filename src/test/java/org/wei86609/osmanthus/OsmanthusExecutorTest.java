@@ -8,17 +8,16 @@ public class OsmanthusExecutorTest extends TestCase {
 
     public void testExecute() {
         Event event=new Event();
-        event.setEventId("flow1");
+       // event.setEventId("helloworldflow");
         event.add("salary", 5000);
         event.add("weight", 500);
         event.add("isBlackName", true);
+        event.add("fee", 500);
         event.add("name", "test");
         event.add("reg", "12312");
         try {
             OsmanthusExecutor executor=  new OsmanthusExecutor();
-            executor.newEvent(event, null);
-            Thread.sleep(5000);
-           // executor.stop();
+            executor.executeRule(event, "card");
         } catch (Exception e) {
             e.printStackTrace();
         }

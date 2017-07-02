@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<flow id="flow1">
+<flow id="helloworldflow">
     <start id="start" toNodeId="feerule"/>
     <ruleset id="feerule" fromNodeId="start" toNodeId="split1" external="true"/>
     <split id="split1" fromNodeId="feerule">
@@ -10,7 +10,7 @@
             <condition><![CDATA[fee<=1]]></condition>
         </constraint>
     </split>
-    <ruleset id="card" fromNodeId="split1" toNodeId="mlines" external="true"/>
+    <ruleset id="card" fromNodeId="split1" toNodeId="end" external="true"/>
     <parallel id="mlines" fromNodeId="card">
         <line toNodeId="p1"/>
         <line toNodeId="p2"/>

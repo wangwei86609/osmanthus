@@ -45,7 +45,7 @@ public class FlowEngine{
         return true;
     }
 
-    private void runFlowNode(Event event,String nodeId)throws Exception{
+    public void runFlowNode(Event event,String nodeId)throws Exception{
         if(StringUtils.isBlank(nodeId)){
             return;
         }

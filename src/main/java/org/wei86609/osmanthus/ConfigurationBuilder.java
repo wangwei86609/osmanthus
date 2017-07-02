@@ -18,9 +18,10 @@ public class ConfigurationBuilder {
 
     private volatile static ConfigurationBuilder builder;
 
-    private ConfigurationBuilder() {
+    private ConfigurationBuilder() throws Exception {
         this.flowFileTranslator=new FlowFileTranslator();
         this.ruleSetTranslator=new FileRuleSetTranslator();
+        loadConfiguration();
     }
 
     public FileRuleSetTranslator getRuleSetTranslator() {
@@ -43,7 +44,7 @@ public class ConfigurationBuilder {
         return avaiableNodes;
     }
 
-    public static ConfigurationBuilder getBuilder() {
+    public static ConfigurationBuilder getBuilder() throws Exception {
         if (builder == null) {
             synchronized (ConfigurationBuilder.class) {
                 if (builder == null) {

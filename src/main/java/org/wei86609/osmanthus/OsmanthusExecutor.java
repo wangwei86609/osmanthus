@@ -50,6 +50,13 @@ public class OsmanthusExecutor implements EventListener{
         executorService.execute(task);
     }
 
+    public void executeRule(Event event,String nodeId) throws Exception {
+        if(flowEngine==null){
+            flowEngine=buildFlowEngine();
+        }
+        flowEngine.runFlowNode(event, nodeId);
+    }
+
     public boolean stop(){
         executorService.shutdown();
         while(true){

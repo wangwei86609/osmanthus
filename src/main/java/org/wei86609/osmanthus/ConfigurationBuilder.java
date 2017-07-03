@@ -55,12 +55,13 @@ public class ConfigurationBuilder {
         return builder;
     }
 
-    protected void loadConfiguration()throws Exception{
+    protected ConfigurationBuilder loadConfiguration()throws Exception{
         List<Flow> flows=flowFileTranslator.getNodes();
         List<Node> rules =  ruleSetTranslator.getNodes();
         for(Flow flow:flows){
             combinRules(flow,rules);
         }
+        return getBuilder();
     }
 
     public Node loadOneFlow(String flowId) throws Exception{

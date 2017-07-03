@@ -38,6 +38,8 @@ public class OsmanthusExecutor implements EventListener{
         osmanthus.addNodeExecutor(generalRuleSetExecutor);
         return osmanthus;
     }
+    
+    
 
     public void newEvent(Event event, String nodeId) {
         if(flowEngine==null){
@@ -50,11 +52,11 @@ public class OsmanthusExecutor implements EventListener{
         executorService.execute(task);
     }
 
-    public void executeRule(Event event,String nodeId) throws Exception {
+    public void executeRule(Event event,String ruleId) throws Exception {
         if(flowEngine==null){
             flowEngine=buildFlowEngine();
         }
-        flowEngine.runFlowNode(event, nodeId);
+        flowEngine.runRule(event, ruleId);
     }
 
     public boolean stop(){

@@ -45,7 +45,7 @@ public class FlowEngine{
         return true;
     }
 
-    public void runFlowNode(Event event,String nodeId)throws Exception{
+    private void runFlowNode(Event event,String nodeId)throws Exception{
         if(StringUtils.isBlank(nodeId)){
             return;
         }
@@ -56,6 +56,16 @@ public class FlowEngine{
         String nextNodeId= nodeExecutorMap.get(node.getType()).execute(event, node);
         runFlowNode(event,nextNodeId);
     }
-
+    
+    public void runRule(Event event,String ruleId)throws Exception{
+        if(StringUtils.isBlank(ruleId)){
+            return;
+        }
+        Node node=ConfigurationBuilder.getBuilder().loadConfiguration().getAvaiableNodes().get(ruleId);
+        if(node==null){
+            return;
+        }
+        nodeExecutorMap.get(node.getType()).execute(event, node);
+    }
 
 }

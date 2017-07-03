@@ -14,10 +14,26 @@ import org.wei86609.osmanthus.node.executor.ruleset.GeneralRuleSetExecutor;
 import org.wei86609.osmanthus.node.handler.GeneralRuleSetHandler;
 
 public class OsmanthusExecutor implements EventListener{
+    
+    private volatile static OsmanthusExecutor executor;
 
-    private ExecutorService executorService = Executors.newCachedThreadPool();
+    private ExecutorService executorService;
 
     private FlowEngine flowEngine;
+    
+    private int threadCnt=10;
+    
+    public int getThreadCnt() {
+        return threadCnt;
+    }
+
+    public void setThreadCnt(int threadCnt) {
+        this.threadCnt = threadCnt;
+    }
+
+    private OsmanthusExecutor(){
+        flowEngine=buildFlowEngine();
+    }
 
     private FlowEngine buildFlowEngine() {
         FlowEngine osmanthus = new FlowEngine();
@@ -39,12 +55,34 @@ public class OsmanthusExecutor implements EventListener{
         return osmanthus;
     }
     
-    
-
-    public void newEvent(Event event, String nodeId) {
-        if(flowEngine==null){
-            flowEngine=buildFlowEngine();
+    public OsmanthusExecutor withSingleThreadModel(){
+        if(executorService!=null){
+            executorService.shutdown();
+            executorService=null;
         }
+        return executor;
+    }
+    
+    public OsmanthusExecutor withMultipleThreadModel(){
+        if(executorService==null){
+            executorService=Executors.newFixedThreadPool(threadCnt);
+        }
+        return executor;
+    }
+    
+    public static OsmanthusExecutor getExecutor() throws Exception {
+        if (executor == null) {
+            synchronized (OsmanthusExecutor.class) {
+                if (executor == null) {
+                    executor = new OsmanthusExecutor();
+                }
+            }
+        }
+        return executor;
+    }
+
+    public void executeNewEvent(Event event, String nodeId) {
+        withMultipleThreadModel();
         OsmanthusTask task=new OsmanthusTask();
         task.setEvent(event);
         task.setNodeId(nodeId);
@@ -53,23 +91,13 @@ public class OsmanthusExecutor implements EventListener{
     }
 
     public void executeRule(Event event,String ruleId) throws Exception {
-        if(flowEngine==null){
-            flowEngine=buildFlowEngine();
-        }
         flowEngine.runRule(event, ruleId);
     }
 
-    public boolean stop(){
-        executorService.shutdown();
-        while(true){
-            if(executorService.isTerminated()){
-                return true;
-            }
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    public void stop(){
+        if(executorService!=null){
+            executorService.shutdown();
+            executorService=null;
         }
     }
 

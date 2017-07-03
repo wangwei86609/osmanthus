@@ -1,8 +1,8 @@
 package org.wei86609.osmanthus;
 
-import junit.framework.TestCase;
-
 import org.wei86609.osmanthus.event.Event;
+
+import junit.framework.TestCase;
 
 public class OsmanthusExecutorTest extends TestCase {
 
@@ -16,9 +16,7 @@ public class OsmanthusExecutorTest extends TestCase {
         event.add("name", "test");
         event.add("reg", "12312");
         try {
-            OsmanthusExecutor executor=  new OsmanthusExecutor();
-            executor.newEvent(event, null);
-
+            OsmanthusExecutor.getExecutor().withMultipleThreadModel().executeNewEvent(event, null);
             Thread.sleep(5000);
         } catch (Exception e) {
             e.printStackTrace();

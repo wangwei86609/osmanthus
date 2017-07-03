@@ -5,8 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.wei86609.osmanthus.node.Constraint;
@@ -22,7 +22,7 @@ import org.wei86609.osmanthus.node.ruleset.RuleSet;
 
 import com.thoughtworks.xstream.XStream;
 
-public class FlowFileTranslator implements NodeTranslator<Flow>{
+public class FlowFileTranslator implements NodeTranslator<String,Flow>{
 
     private String flowFolder;
 
@@ -54,8 +54,8 @@ public class FlowFileTranslator implements NodeTranslator<Flow>{
         this.flowFileExtension = flowFileExtension;
     }
 
-    public List<Flow> getNodes()throws Exception{
-        List<Flow> flowList=new ArrayList<Flow>();
+    public Map<String,Flow> getNodes()throws Exception{
+        Map<String,Flow> flowMaps=new HashMap<String,Flow>();
         File file=null;
         if(StringUtils.isEmpty(flowFolder)){
             URL url=GeneralRuleSetExecutor.class.getClassLoader().getResource(flowFolderName);
@@ -71,10 +71,10 @@ public class FlowFileTranslator implements NodeTranslator<Flow>{
         for(int i=0;i<rsf.length;i++){
             Flow flow=loadFlowFromFile(rsf[i]);
             if(flow!=null){
-                flowList.add(flow);
+                flowMaps.put(flow.getId(), flow);
             }
         }
-        return flowList;
+        return flowMaps;
     }
 
     private Flow loadFlowFromFile(File xmlfile) throws FileNotFoundException{
@@ -84,13 +84,7 @@ public class FlowFileTranslator implements NodeTranslator<Flow>{
     }
 
     public Flow getNode(String flowId) throws Exception {
-        List<Flow> flows=getNodes();
-        for(Flow flow:flows){
-            if(flow!=null && flow.getId()!=null && flow.getId().equals(flowId)){
-                return flow;
-            }
-        }
-        return null;
+        return getNodes().get(flowId);
     }
 
 }

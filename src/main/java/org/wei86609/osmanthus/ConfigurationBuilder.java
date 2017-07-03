@@ -1,6 +1,8 @@
 package org.wei86609.osmanthus;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.wei86609.osmanthus.node.Flow;
@@ -14,7 +16,7 @@ public class ConfigurationBuilder {
 
     private FlowFileTranslator flowFileTranslator;
 
-    private final ConcurrentHashMap<String, Node> avaiableNodes = new ConcurrentHashMap<String, Node>();
+    private final ConcurrentHashMap<String, Flow> flowMaps = new ConcurrentHashMap<String, Flow>();
 
     private volatile static ConfigurationBuilder builder;
 
@@ -40,8 +42,8 @@ public class ConfigurationBuilder {
         this.flowFileTranslator = flowFileTranslator;
     }
 
-    public ConcurrentHashMap<String, Node> getAvaiableNodes() {
-        return avaiableNodes;
+    public ConcurrentHashMap<String, Flow> getFlowMaps() {
+        return flowMaps;
     }
 
     public static ConfigurationBuilder getBuilder() throws Exception {
@@ -55,49 +57,41 @@ public class ConfigurationBuilder {
         return builder;
     }
 
-    protected ConfigurationBuilder loadConfiguration()throws Exception{
-        List<Flow> flows=flowFileTranslator.getNodes();
-        List<Node> rules =  ruleSetTranslator.getNodes();
-        for(Flow flow:flows){
-            combinRules(flow,rules);
+    public ConfigurationBuilder loadConfiguration()throws Exception{
+        flowMaps.clear();
+        Map<String,Flow> flows=flowFileTranslator.getNodes();
+        flowMaps.putAll(flows);
+        Map<String,Node> externalRules =  ruleSetTranslator.getNodes();
+        Collection<Flow> fvalues=flowMaps.values();
+        for(Flow flow:fvalues){
+            if(flow.getNodes()==null ||flow.getNodes().isEmpty()){
+                continue;
+            }
+            mergeRulesFromExternal(flow,externalRules);
         }
-        return getBuilder();
+        
+        return builder;
     }
 
-    public Node loadOneFlow(String flowId) throws Exception{
-        Flow flow=flowFileTranslator.getNode(flowId);
-        List<Node> rules =  ruleSetTranslator.getNodes();
-        combinRules(flow,rules);
+    public Node getFirstNodeByFlow(String flowId) throws Exception{
+        Flow flow=flowMaps.get(flowId);
         return flow.getNodes().get(0);
     }
 
-    private void combinRules(Flow flow,List<Node> rules){
-        if(flow==null || flow.getNodes()==null ||flow.getNodes().isEmpty()){
-            return;
-        }
-        List<Node> flowNodes=flow.getNodes();
-        for(Node fn:flowNodes){
-            avaiableNodes.remove(fn.getId());
-            if(fn.isExternal()){
-                Node rule=getRuleById(rules,fn.getId());
+    private void mergeRulesFromExternal(Flow flow,Map<String,Node> externalRules){
+        Map<String,Node> flowMapNodes=flow.getMapNodes();
+        for(Entry<String,Node> entry:flowMapNodes.entrySet()){
+            if(entry.getValue().isExternal()){
+                Node rule=externalRules.get(entry.getKey());
                 if(rule!=null){
-                    rule.setFromNodeId(fn.getFromNodeId());
-                    rule.setToNodeId(fn.getToNodeId());
-                    avaiableNodes.put(fn.getId(), rule);
+                    rule.setFromNodeId(entry.getValue().getFromNodeId());
+                    rule.setToNodeId(entry.getValue().getToNodeId());
+                    flow.getMapNodes().remove(entry.getKey());
+                    flow.getMapNodes().put(entry.getKey(), rule);
                 }
-            }else{
-                avaiableNodes.put(fn.getId(), fn);
             }
         }
-    }
-
-    private Node getRuleById(List<Node> rules,String id){
-        for(Node rule:rules){
-            if(rule.getId().equals(id)){
-                return rule;
-            }
-        }
-        return null;
-    }
+   }
+ 
 
 }

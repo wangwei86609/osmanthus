@@ -1,6 +1,6 @@
 package org.wei86609.osmanthus.translator;
 
-import java.util.List;
+import java.util.Map;
 
 import org.wei86609.osmanthus.node.Node;
 /**
@@ -8,9 +8,9 @@ import org.wei86609.osmanthus.node.Node;
  * @author wangwei19
  *
  */
-public interface NodeTranslator<OUTPUT extends Node>{
+public interface NodeTranslator<KEY,OUTPUT extends Node>{
 
-    public List<OUTPUT> getNodes()throws Exception;
+    public Map<KEY,OUTPUT> getNodes()throws Exception;
 
     public OUTPUT getNode(String group)throws Exception;
 }

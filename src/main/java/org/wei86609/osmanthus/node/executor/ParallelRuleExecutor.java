@@ -22,7 +22,7 @@ public class ParallelRuleExecutor implements NodeExecutor{
         List<Line> lines=parallel.getLines();
         for(Line line:lines){
             if(eventListener!=null){
-                eventListener.newEvent(event.createNewEvent(), line.getToNodeId());
+                eventListener.executeNewEvent(event.createNewEvent(), line.getToNodeId());
             }
         }
         return null;

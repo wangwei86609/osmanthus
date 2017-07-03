@@ -5,8 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.wei86609.osmanthus.node.Node;
@@ -16,7 +16,7 @@ import org.wei86609.osmanthus.node.ruleset.RuleSet;
 
 import com.thoughtworks.xstream.XStream;
 
-public class FileRuleSetTranslator implements NodeTranslator<Node>{
+public class FileRuleSetTranslator implements NodeTranslator<String,Node>{
 
     private String ruleSetFolder;
 
@@ -48,8 +48,8 @@ public class FileRuleSetTranslator implements NodeTranslator<Node>{
         this.ruleSetFolderName = ruleSetFolderName;
     }
 
-    public List<Node> getNodes()throws Exception{
-        List<Node> ruleSetList=new ArrayList<Node>();
+    public Map<String,Node> getNodes()throws Exception{
+        Map<String,Node> ruleMaps=new HashMap<String,Node>();
         File file=null;
         if(StringUtils.isEmpty(ruleSetFolder)){
             URL url=GeneralRuleSetExecutor.class.getClassLoader().getResource(ruleSetFolderName);
@@ -65,10 +65,10 @@ public class FileRuleSetTranslator implements NodeTranslator<Node>{
         for(int i=0;i<rsf.length;i++){
             Node node=loadRuleSetFromFile(rsf[i]);
             if(node!=null){
-                ruleSetList.add(node);
+                ruleMaps.put(node.getId(), node);
             }
         }
-        return ruleSetList;
+        return ruleMaps;
     }
 
     private Node loadRuleSetFromFile(File xmlfile) throws FileNotFoundException{
@@ -78,13 +78,7 @@ public class FileRuleSetTranslator implements NodeTranslator<Node>{
     }
 
     public Node getNode(String nodeId) throws Exception {
-        List<Node> nodes=getNodes();
-        for(Node node:nodes){
-            if(node!=null && node.getId()!=null && node.getId().equals(nodeId)){
-                return node;
-            }
-        }
-        return null;
+        return getNodes().get(nodeId);
     }
 
 }

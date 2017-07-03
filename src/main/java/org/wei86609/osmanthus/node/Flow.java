@@ -1,6 +1,8 @@
 package org.wei86609.osmanthus.node;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
@@ -8,6 +10,8 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 @XStreamAlias("flow")
 public class Flow extends Node{
+    
+    private final Map<String,Node> mapNodes=new HashMap<String,Node>();
 
     @XStreamAsAttribute
     private String model;
@@ -21,6 +25,9 @@ public class Flow extends Node{
 
     public void setNodes(List<Node> nodes) {
         this.nodes = nodes;
+        for(Node node:nodes){
+            mapNodes.put(node.getId(), node);
+        }
     }
 
     public String getModel() {
@@ -29,6 +36,10 @@ public class Flow extends Node{
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public Map<String, Node> getMapNodes() {
+        return mapNodes;
     }
 
 }

@@ -58,7 +58,7 @@ public class FlowEngine{
     }
 
     private Node getNodeById(Event event, String nodeId) throws Exception {
-        Node node=ConfigurationBuilder.getBuilder().getFlowMaps().get(event.getEventId()).getMapNodes().get(nodeId);
+        Node node=ConfigurationBuilder.getBuilder().getFlowMaps().get(event.getEventId()).getNodeMap().get(nodeId);
         return node;
     }
     

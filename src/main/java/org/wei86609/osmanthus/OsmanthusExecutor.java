@@ -23,6 +23,16 @@ public class OsmanthusExecutor implements EventListener{
     
     private int threadCnt=10;
     
+    private boolean isSingleThreadModel=true;
+    
+    public boolean isSingleThreadModel() {
+        return isSingleThreadModel;
+    }
+
+    public void setSingleThreadModel(boolean isSingleThreadModel) {
+        this.isSingleThreadModel = isSingleThreadModel;
+    }
+
     public int getThreadCnt() {
         return threadCnt;
     }
@@ -56,6 +66,7 @@ public class OsmanthusExecutor implements EventListener{
     }
     
     public OsmanthusExecutor withSingleThreadModel(){
+        isSingleThreadModel=true;
         if(executorService!=null){
             executorService.shutdown();
             executorService=null;
@@ -64,6 +75,7 @@ public class OsmanthusExecutor implements EventListener{
     }
     
     public OsmanthusExecutor withMultipleThreadModel(){
+        isSingleThreadModel=false;
         if(executorService==null){
             executorService=Executors.newFixedThreadPool(threadCnt);
         }
@@ -81,13 +93,20 @@ public class OsmanthusExecutor implements EventListener{
         return executor;
     }
 
-    public void executeNewEvent(Event event, String nodeId) {
-        withMultipleThreadModel();
-        OsmanthusTask task=new OsmanthusTask();
-        task.setEvent(event);
-        task.setNodeId(nodeId);
-        task.setFlowEngine(flowEngine);
-        executorService.execute(task);
+    public void executeNewEvent(Event event, String nodeId){
+        if(!isSingleThreadModel){
+            OsmanthusTask task=new OsmanthusTask();
+            task.setEvent(event);
+            task.setNodeId(nodeId);
+            task.setFlowEngine(flowEngine);
+            executorService.execute(task);
+        }else{
+            try {
+                flowEngine.execute(event, nodeId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void executeRule(Event event,String ruleId) throws Exception {

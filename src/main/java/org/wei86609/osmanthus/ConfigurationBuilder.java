@@ -1,8 +1,8 @@
 package org.wei86609.osmanthus;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.wei86609.osmanthus.node.Flow;
@@ -79,18 +79,22 @@ public class ConfigurationBuilder {
     }
 
     private void mergeRulesFromExternal(Flow flow,Map<String,Node> externalRules){
-        Map<String,Node> flowMapNodes=flow.getMapNodes();
-        for(Entry<String,Node> entry:flowMapNodes.entrySet()){
-            if(entry.getValue().isExternal()){
-                Node rule=externalRules.get(entry.getKey());
+        Map<String,Node> flowMapNodes=flow.getNodeMap();
+        Iterator<String> ite = flowMapNodes.keySet().iterator(); 
+        while(ite.hasNext()){
+            String key=ite.next();
+            Node fNode=flowMapNodes.get(key);
+            if(fNode.isExternal()){
+                Node rule=externalRules.get(key);
                 if(rule!=null){
-                    rule.setFromNodeId(entry.getValue().getFromNodeId());
-                    rule.setToNodeId(entry.getValue().getToNodeId());
-                    flow.getMapNodes().remove(entry.getKey());
-                    flow.getMapNodes().put(entry.getKey(), rule);
+                    rule.setFromNodeId(fNode.getFromNodeId());
+                    rule.setToNodeId(fNode.getToNodeId());
+                    //flowMapNodes.remove(key);
+                    flowMapNodes.put(key, rule);
                 }
             }
         }
+        flow.setNodeMap(flowMapNodes);
    }
  
 

@@ -10,9 +10,9 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 @XStreamAlias("flow")
 public class Flow extends Node{
-    
-    private final Map<String,Node> mapNodes=new HashMap<String,Node>();
 
+    private Map<String,Node> nodeMap=new HashMap<String,Node>();
+    
     @XStreamAsAttribute
     private String model;
 
@@ -25,9 +25,6 @@ public class Flow extends Node{
 
     public void setNodes(List<Node> nodes) {
         this.nodes = nodes;
-        for(Node node:nodes){
-            mapNodes.put(node.getId(), node);
-        }
     }
 
     public String getModel() {
@@ -38,8 +35,15 @@ public class Flow extends Node{
         this.model = model;
     }
 
-    public Map<String, Node> getMapNodes() {
-        return mapNodes;
+    public Map<String, Node> getNodeMap() {
+        for(Node node:nodes){
+            nodeMap.put(node.getId(), node);
+        }
+        return nodeMap;
+    }
+
+    public void setNodeMap(Map<String, Node> nodeMap) {
+        this.nodeMap = nodeMap;
     }
 
 }

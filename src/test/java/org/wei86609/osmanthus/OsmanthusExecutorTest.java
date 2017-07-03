@@ -17,6 +17,7 @@ public class OsmanthusExecutorTest extends TestCase {
         event.add("reg", "12312");
         try {
             OsmanthusExecutor.getExecutor().withMultipleThreadModel().executeNewEvent(event, null);
+            
             Thread.sleep(5000);
         } catch (Exception e) {
             e.printStackTrace();

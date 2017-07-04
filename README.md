@@ -77,4 +77,26 @@ public class OsmanthusExecutorTest extends TestCase {
 2017-07-02 22:23:54,472-DEBUG [main]->(EmptyNodeExecutor.java:13) The empty node[end] of the event{Event [eventId=null, threadId=null, model=FIRST, parameters={fee=500, isBlackName=true, weight=-800, reg=12312, name=test, salary=5000}]} executed.
 Event [eventId=null, threadId=null, model=FIRST, parameters={fee=500, isBlackName=true, weight=-800, reg=12312, name=test, salary=5000}]
 ```
-
+ ## (Decision tree rules)
+ In order to implments the decision tree data structure of rules, we have to use the "SPlIT" node to help us to create more than one branch, but here we call the banrach as "constraint", that contatins one condition, if its condition is true, it will go to "toNodeId" node.
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<flow id="flow1">
+    <start id="start" toNodeId="feerule"/>
+    <ruleset id="feerule" fromNodeId="start" toNodeId="split1" external="true"/>
+    <split id="split1" fromNodeId="feerule">
+        <constraint toNodeId="card">
+            <condition><![CDATA[fee>1]]></condition>
+        </constraint>
+        <constraint toNodeId="end">
+            <condition><![CDATA[fee<=1]]></condition>
+        </constraint>
+    </split>
+    <ruleset id="card" fromNodeId="split1" toNodeId="p5" external="true"/>
+    <rule id="p5" fromNodeId="merge" toNodeId="end">
+        <condition><![CDATA[2==2]]></condition>
+        <action><![CDATA[rule5="p5"]]></action>
+    </rule>
+    <end id="end"/>
+</flow>
+```

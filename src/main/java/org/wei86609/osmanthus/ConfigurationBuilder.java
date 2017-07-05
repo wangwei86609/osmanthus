@@ -5,13 +5,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.log4j.Logger;
 import org.wei86609.osmanthus.node.Flow;
 import org.wei86609.osmanthus.node.Node;
 import org.wei86609.osmanthus.translator.FileRuleSetTranslator;
 import org.wei86609.osmanthus.translator.FlowFileTranslator;
 
 public class ConfigurationBuilder {
-
+    
+    private final static Logger logger = Logger.getLogger(ConfigurationBuilder.class);
+    
     private FileRuleSetTranslator ruleSetTranslator;
 
     private FlowFileTranslator flowFileTranslator;
@@ -61,12 +64,14 @@ public class ConfigurationBuilder {
         flowMaps.clear();
         Map<String,Flow> flows=flowFileTranslator.getNodes();
         flowMaps.putAll(flows);
-        Map<String,Node> externalRules =  ruleSetTranslator.getNodes();
         Collection<Flow> fvalues=flowMaps.values();
         for(Flow flow:fvalues){
             if(flow.getNodes()==null ||flow.getNodes().isEmpty()){
                 continue;
             }
+            flow.nodeList2NodeMap();
+            Map<String,Node> externalRules =  ruleSetTranslator.getNodes();
+            logger.debug("Flow ["+flow.getId()+"] will meger its rules with external rules");
             mergeRulesFromExternal(flow,externalRules);
         }
         
@@ -89,13 +94,10 @@ public class ConfigurationBuilder {
                 if(rule!=null){
                     rule.setFromNodeId(fNode.getFromNodeId());
                     rule.setToNodeId(fNode.getToNodeId());
-                    //flowMapNodes.remove(key);
                     flowMapNodes.put(key, rule);
                 }
             }
         }
-        flow.setNodeMap(flowMapNodes);
    }
- 
 
 }

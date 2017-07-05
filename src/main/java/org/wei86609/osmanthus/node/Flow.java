@@ -36,14 +36,17 @@ public class Flow extends Node{
     }
 
     public Map<String, Node> getNodeMap() {
-        for(Node node:nodes){
-            nodeMap.put(node.getId(), node);
-        }
         return nodeMap;
     }
 
     public void setNodeMap(Map<String, Node> nodeMap) {
         this.nodeMap = nodeMap;
+    }
+    
+    public void nodeList2NodeMap(){
+        for(Node node:nodes){
+            nodeMap.put(node.getId(), node);
+        }
     }
 
 }

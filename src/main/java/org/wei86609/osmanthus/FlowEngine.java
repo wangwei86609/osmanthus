@@ -54,6 +54,7 @@ public class FlowEngine{
             return;
         }
         String nextNodeId= nodeExecutorMap.get(node.getType()).execute(event, node);
+        logger.debug("Current node["+nodeId+"]'s next node id is["+nextNodeId+"]");
         runFlowNode(event,nextNodeId);
     }
 

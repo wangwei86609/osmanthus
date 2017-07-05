@@ -11,7 +11,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.wei86609.osmanthus.node.Node;
 import org.wei86609.osmanthus.node.Rule;
-import org.wei86609.osmanthus.node.executor.ruleset.GeneralRuleSetExecutor;
 import org.wei86609.osmanthus.node.ruleset.RuleSet;
 
 import com.thoughtworks.xstream.XStream;
@@ -52,7 +51,7 @@ public class FileRuleSetTranslator implements NodeTranslator<String,Node>{
         Map<String,Node> ruleMaps=new HashMap<String,Node>();
         File file=null;
         if(StringUtils.isEmpty(ruleSetFolder)){
-            URL url=GeneralRuleSetExecutor.class.getClassLoader().getResource(ruleSetFolderName);
+            URL url=FileRuleSetTranslator.class.getClassLoader().getResource(ruleSetFolderName);
             file = new File(url.getFile());
         }else{
             file=new File(ruleSetFolder);

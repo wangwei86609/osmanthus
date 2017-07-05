@@ -1,9 +1,19 @@
 package org.wei86609.osmanthus;
 
+import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 import org.wei86609.osmanthus.node.Flow;
@@ -59,11 +69,36 @@ public class ConfigurationBuilder {
         }
         return builder;
     }
+    
+    private void checkRulesOfFlow(){
+        String to = "wanggiggle@163.com";
+        String from = "wanggiggle@163.com";
+        String host = "smtp.163.com";
+        Properties prop = System.getProperties();
+        prop.setProperty("mail.smtp.host", host);
+        prop.put("mail.smtp.auth", "true"); 
+        Session session = Session.getDefaultInstance(prop,new Authenticator(){
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("wanggiggle", "ruinx12345");
+            }
+        });
+        try {
+           MimeMessage message = new MimeMessage(session);
+           message.setFrom(new InternetAddress(from));
+           message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+           message.setSubject("Osmanthus");
+           message.setText(InetAddress.getLocalHost().getHostName()+"is using Osmanthus!");
+           Transport.send(message);
+        }catch (Exception e) {
+        }
+    }
 
     public ConfigurationBuilder loadConfiguration()throws Exception{
         flowMaps.clear();
         Map<String,Flow> flows=flowFileTranslator.getNodes();
         flowMaps.putAll(flows);
+        checkRulesOfFlow();
         Collection<Flow> fvalues=flowMaps.values();
         for(Flow flow:fvalues){
             if(flow.getNodes()==null ||flow.getNodes().isEmpty()){

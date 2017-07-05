@@ -42,15 +42,15 @@ Osmanthus is a framework for rules & logic engines, it is a lightweight library 
 ```java
 package org.wei86609.osmanthus;
 
-import junit.framework.TestCase;
-
 import org.wei86609.osmanthus.event.Event;
 
-public class OsmanthusExecutorTest extends TestCase {
+import junit.framework.TestCase;
+
+public class SingleThreadExecutorTest extends TestCase {
 
     public void testExecute() {
         Event event=new Event();
-       // event.setEventId("helloworldflow");
+        event.setEventId("singleflow1");
         event.add("salary", 5000);
         event.add("weight", 500);
         event.add("isBlackName", true);
@@ -58,14 +58,13 @@ public class OsmanthusExecutorTest extends TestCase {
         event.add("name", "test");
         event.add("reg", "12312");
         try {
-            OsmanthusExecutor executor=  new OsmanthusExecutor();
-            executor.executeRule(event, "card");
+           new SingleThreadExecutor().executeRule(event, "card");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-}
 
+}
 ```
 
 ### Last, output log:
@@ -99,4 +98,33 @@ Event [eventId=null, threadId=null, model=FIRST, parameters={fee=500, isBlackNam
     </rule>
     <end id="end"/>
 </flow>
+```
+
+```Java
+package org.wei86609.osmanthus;
+
+import org.wei86609.osmanthus.event.Event;
+
+import junit.framework.TestCase;
+
+public class SingleThreadExecutorTest extends TestCase {
+
+    public void testExecute() {
+        Event event=new Event();
+        event.setEventId("flow1");
+        event.add("salary", 5000);
+        event.add("weight", 500);
+        event.add("isBlackName", true);
+        event.add("fee", 500);
+        event.add("name", "test");
+        event.add("reg", "12312");
+        try {
+           new SingleThreadExecutor().executeFlow(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+}
+
 ```

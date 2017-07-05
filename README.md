@@ -128,3 +128,80 @@ public class SingleThreadExecutorTest extends TestCase {
 }
 
 ```
+ ## Multiple Thread to run rules
+If you want to rule rules with multiple thead model, you have to use the "Parallel" node to help us to create more than one line, xml code as below：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<flow id="multiflow">
+    <start id="start" toNodeId="feerule"/>
+    <ruleset id="feerule" fromNodeId="start" toNodeId="split1" external="true"/>
+    <split id="split1" fromNodeId="feerule">
+        <constraint toNodeId="card">
+            <condition><![CDATA[fee>1]]></condition>
+        </constraint>
+        <constraint toNodeId="end">
+            <condition><![CDATA[fee<=1]]></condition>
+        </constraint>
+    </split>
+    <ruleset id="card" fromNodeId="split1" toNodeId="mlines" external="true"/>
+    <parallel id="mlines" fromNodeId="card">
+        <line toNodeId="p1"/>
+        <line toNodeId="p2"/>
+    </parallel>
+    <rule id="p1" fromNodeId="mlines" toNodeId="end">
+        <condition><![CDATA[1==1]]></condition>
+        <action><![CDATA[rule1="p1"]]></action>
+    </rule>
+    <rule id="p2" fromNodeId="mlines" toNodeId="mlines2">
+        <condition><![CDATA[2==2]]></condition>
+        <action><![CDATA[rule2="p2"]]></action>
+    </rule>
+    <parallel id="mlines2" fromNodeId="p2">
+        <line toNodeId="p3"/>
+        <line toNodeId="p4"/>
+    </parallel>
+    <rule id="p3" fromNodeId="mlines2" toNodeId="merge">
+        <condition><![CDATA[1==1]]></condition>
+        <action><![CDATA[rule3="p3"]]></action>
+    </rule>
+    <rule id="p4" fromNodeId="mlines2" toNodeId="merge">
+        <condition><![CDATA[2==2]]></condition>
+        <action><![CDATA[rule4="p4"]]></action>
+    </rule>
+    
+    <merge id="merge" fromNodeId="p3,p4" lineCnt="2" toNodeId="p5"/>
+    
+    <rule id="p5" fromNodeId="merge" toNodeId="end">
+        <condition><![CDATA[2==2]]></condition>
+        <action><![CDATA[rule5="p5"]]></action>
+    </rule>
+    <end id="end"/>
+</flow>
+```
+```Java
+package org.wei86609.osmanthus;
+
+import org.wei86609.osmanthus.event.Event;
+
+import junit.framework.TestCase;
+
+public class MultipleThreadExecutorTest extends TestCase {
+
+    public void testAddMultiEvent() {
+        Event event=new Event();
+        event.setEventId("multiflow");
+        event.add("salary", 5000);
+        event.add("weight", 500);
+        event.add("isBlackName", true);
+        event.add("fee", 500);
+        event.add("name", "test");
+        event.add("reg", "12312");
+        try {
+           new MultipleThreadExecutor().addMultiEvent(event, null);
+           Thread.sleep(5000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```

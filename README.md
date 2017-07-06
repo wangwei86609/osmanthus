@@ -1,5 +1,5 @@
 ## what is the Osmanthus?
-Osmanthus is a framework for rules & logic engines, it is a lightweight library and based on MVEL library , but it is easier to use than drools, supports very complex & complicated rules and logics. Such as: it can help us to implement decision tree and score card rules, can execute multiple rules in parallel mode.
+Osmanthus is a framework for rules & flow engines, it is a lightweight library and based on MVEL library , but it is easier to use than drools, supports very complex & complicated rules and logics. Such as: it can help us to implement decision tree and score card rules, can execute multiple rules in parallel mode.
 
 ## Core features
 
@@ -129,7 +129,7 @@ public class SingleThreadExecutorTest extends TestCase {
 
 ```
  ## Multiple Thread to run rules
-If you want to rule rules with multiple thead model, you have to use the "Parallel" node to help us to create more than one line, xml code as below：
+If you want to run rules with multiple thead model, you have to use the "Parallel" node to help us to create more than one line, xml code as below：
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <flow id="multiflow">

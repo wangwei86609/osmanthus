@@ -205,3 +205,86 @@ public class MultipleThreadExecutorTest extends TestCase {
     }
 }
 ```
+ ## Run an example of "Guess Number"
+ The "Guess Number" is a classical example to help us to understand the rule engine, so here can also implement the example by Osmanthus.
+ 
+ ```xml
+ <?xml version="1.0" encoding="UTF-8"?>
+ <rule id="guessnumber">
+     <condition><![CDATA[true]]></condition>
+     <action><![CDATA[
+     /**
+        * Sample MVEL 2.0 Script
+        * "Random Guess"
+        * by: Christopher Michael Brock
+    */
+
+    import java.io.*;
+    import java.util.Random;
+    //
+    // Seed the random number
+    //
+
+    $num = new Random().nextInt(100);
+    System.out.println($num);
+    $guesses = 0;
+    $in = -1;
+
+    //
+    // Setup the STDIN line reader.
+    //
+
+    $linereader = new BufferedReader(new InputStreamReader(System.in));
+
+    System.out.print("I'm Thinking of a Number Between 1 and 100... Can you guess what it is? ");
+
+    //
+    // Main program loop
+    //
+
+    while ($in != $num) {
+        if ($in != -1) {
+            System.out.print("Nope.  The number is: " + ($num < $in ? "Lower" : "Higher") + ".  What's your next guess? ");
+        }
+        if (($in = $linereader.readLine().trim()) == empty) $in = -2;
+            $guesses++;
+    }
+
+    System.out.println("You got it!  It took you " + $guesses + " tries");    
+]]></action>
+ </rule>
+ 
+ ```
+ ### Code example
+ ```java
+ package org.wei86609.osmanthus;
+
+import org.wei86609.osmanthus.event.Event;
+
+import junit.framework.TestCase;
+
+public class SingleThreadExecutorTest extends TestCase {
+
+    public void testExecute() {
+        Event event=new Event();
+        event.setEventId("singleflow1");
+        event.add("salary", 5000);
+        event.add("weight", 500);
+        event.add("isBlackName", true);
+        event.add("fee", 500);
+        event.add("name", "test");
+        event.add("reg", "12312");
+        try {
+          // new SingleThreadExecutor().executeFlow(event);
+            new SingleThreadExecutor().executeSingleRule(event, "guessnumber");
+            
+           // System.out.println(new Random().nextInt(100));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+}
+
+ ```
+ 

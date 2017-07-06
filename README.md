@@ -45,7 +45,7 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
 <merge id="merge" fromNodeId="p3,p4" lineCnt="2" toNodeId="p5"/>
 ```
 
-## Core features
+## Features
 
  * Lightweight library and easy to learn API
  * Development with xml programming model
@@ -55,7 +55,7 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
  * Parallel mode to execute multiple rules.
  * Support decision tree and score cards rules.
  
- ## Hello world(Score Card rules)
+ ## Hello world-Score Card Rules
 
 ### Rules in XML file:
 
@@ -120,7 +120,7 @@ public class SingleThreadExecutorTest extends TestCase {
 2017-07-02 22:23:54,472-DEBUG [main]->(EmptyNodeExecutor.java:13) The empty node[end] of the event{Event [eventId=null, threadId=null, model=FIRST, parameters={fee=500, isBlackName=true, weight=-800, reg=12312, name=test, salary=5000}]} executed.
 Event [eventId=null, threadId=null, model=FIRST, parameters={fee=500, isBlackName=true, weight=-800, reg=12312, name=test, salary=5000}]
 ```
- ## (Decision tree rules)
+## The rules of Decision Tree
  In order to implments the decision tree data structure of rules, we have to use the "SPlIT" node to help us to create more than one branch, but here we call the banrach as "constraint", that contatins one condition, if its condition is true, it will go to "toNodeId" node.
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -172,7 +172,7 @@ public class SingleThreadExecutorTest extends TestCase {
 }
 
 ```
- ## Multiple Thread to run rules
+## Execute rules with Multiple Thread
 If you want to run rules with multiple thead model, you have to use the "Parallel" node to help us to create more than one line, xml code as below：
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -249,7 +249,7 @@ public class MultipleThreadExecutorTest extends TestCase {
     }
 }
 ```
- ## Example of "Guess Number"
+## Example of "Guess Number"
  The "Guess Number" is a classical example to help us to understand the rule engine, so here can also implement the example by Osmanthus.
  
  ```xml
@@ -293,7 +293,7 @@ public class MultipleThreadExecutorTest extends TestCase {
  </rule>
  
  ```
- ### Code example
+### Code example
  ```java
  package org.wei86609.osmanthus;
 

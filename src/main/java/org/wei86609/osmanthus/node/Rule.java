@@ -19,7 +19,7 @@ public class Rule extends Node{
     private int multipleTimes;
 
     @XStreamAsAttribute
-    private boolean isValid=true;
+    private boolean valid=true;
 
     private String condition;
 
@@ -81,11 +81,11 @@ public class Rule extends Node{
     }
 
     public boolean isValid() {
-        return isValid;
+        return valid;
     }
 
-    public void setValid(boolean isValid) {
-        this.isValid = isValid;
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 
     @Override

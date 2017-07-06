@@ -1,5 +1,49 @@
 ## what is the Osmanthus?
-Osmanthus is a framework for rules & flow engines, it is a lightweight library and based on MVEL library , but it is easier to use than drools, supports very complex & complicated rules and logics. Such as: it can help us to implement decision tree and score card rules, can execute multiple rules in parallel mode.
+Osmanthus is a framework for rules & flow engines, a lightweight library and based on MVEL library. It is more convenient than drools, developers define rules & flows with XML file, it supplies below useful XML node:
+### Rule node:
+* rule: a single rule, example as below:
+
+<rule id="rulefirst" name="rulefirst" priority="0" exclusive="true" multipleTimes="5" valid="true">
+    <condition><![CDATA[true]]></condition>
+    <action><![CDATA[System.out.println("this is a rule,hah")]]></action>
+</rule>
+    
+* ruleset: set of rules, it extends the rule, so that means it has all attributes that rule has.
+
+<ruleset name="set" id="set">
+    <rule id="rulefirst" name="rulefirst" priority="0" exclusive="true" multipleTimes="5" valid="true">
+        <condition><![CDATA[true]]></condition>
+        <action><![CDATA[System.out.println("this is the first rule,hah")]]></action>
+    </rule>
+    <rule id="rulesecond" name="rulesecond" priority="0" exclusive="true" multipleTimes="5" valid="true">
+        <condition><![CDATA[true]]></condition>
+        <action><![CDATA[System.out.println("this is the second rule,hah")]]></action>
+    </rule>
+</ruleset>
+
+### Flow Control node:
+* split, one flow control node, also extends rule node, has more than one "constraint", but only one "constraint"'s condition is true.
+
+<split id="split1" >
+    <constraint toNodeId="card">
+        <condition><![CDATA[fee>1]]></condition>
+    </constraint>
+    <constraint toNodeId="end">
+        <condition><![CDATA[fee<=1]]></condition>
+    </constraint>
+</split>
+
+* parallel, also a flow control node, it controls the execution of rules with parallel model. if your defined flow XML file contains this sort of node, only run this flow with MultipleThreadExecutor Java class. one "line" node that means the system will create a new thread to execute its next nodes.
+
+<parallel id="multiple">
+    <line toNodeId="p1"/>
+    <line toNodeId="p2"/>
+</parallel>
+
+* merge, a merge node, that means this node can merge the execution results of multiple thread. You must define the "lineCnt" attribute, that means you should tell it the number of threads need to be merged.
+<merge id="merge" fromNodeId="p3,p4" lineCnt="2" toNodeId="p5"/>
+
+ supports very complex & complicated rules and logics. Such as: it can help us to implement decision tree and score card rules, execute multiple rules with parallel mode.
 
 ## Core features
 
@@ -13,7 +57,7 @@ Osmanthus is a framework for rules & flow engines, it is a lightweight library a
  
  ## Hello world(Score Card rules)
 
-### First, define rules in one XML file:
+### Rules in XML file:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -37,7 +81,7 @@ Osmanthus is a framework for rules & flow engines, it is a lightweight library a
 </ruleset>
 ```
 
-### Then, write unit test Java code:
+### Java code:
 
 ```java
 package org.wei86609.osmanthus;
@@ -67,7 +111,7 @@ public class SingleThreadExecutorTest extends TestCase {
 }
 ```
 
-### Last, output log:
+### Output log:
 ```log
 2017-07-02 22:23:54,392-DEBUG [main]->(GeneralRuleSetExecutor.java:33) The ruleset[card] of the event{Event [eventId=null, threadId=null, model=FIRST, parameters={fee=500, isBlackName=true, weight=500, reg=12312, name=test, salary=5000}]} has [4] rules
 2017-07-02 22:23:54,469-DEBUG [main]->(RuleExecutor.java:22) The node[gc2] of the event {null} condition=[isBlackName] is true and action=[weight=weight-200]
@@ -168,9 +212,7 @@ If you want to run rules with multiple thead model, you have to use the "Paralle
         <condition><![CDATA[2==2]]></condition>
         <action><![CDATA[rule4="p4"]]></action>
     </rule>
-    
     <merge id="merge" fromNodeId="p3,p4" lineCnt="2" toNodeId="p5"/>
-    
     <rule id="p5" fromNodeId="merge" toNodeId="end">
         <condition><![CDATA[2==2]]></condition>
         <action><![CDATA[rule5="p5"]]></action>
@@ -178,6 +220,7 @@ If you want to run rules with multiple thead model, you have to use the "Paralle
     <end id="end"/>
 </flow>
 ```
+
 ### Java Code
 ```Java
 package org.wei86609.osmanthus;

@@ -35,8 +35,12 @@ public class SingleThreadExecutor{
         flowEngine.execute(event,null);
     }
 
-    public void executeRule(Event event,String ruleId) throws Exception {
+    public void executeRuleFromFlow(Event event,String ruleId) throws Exception {
         flowEngine.runRule(event, ruleId);
+    }
+    
+    public void executeSingleRule(Event event,String ruleId) throws Exception {
+        flowEngine.runSingleRule(event, ruleId);
     }
 
 }

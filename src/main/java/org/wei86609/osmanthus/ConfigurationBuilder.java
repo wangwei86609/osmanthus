@@ -30,6 +30,8 @@ public class ConfigurationBuilder {
     private FlowFileTranslator flowFileTranslator;
 
     private final ConcurrentHashMap<String, Flow> flowMaps = new ConcurrentHashMap<String, Flow>();
+    
+    private final ConcurrentHashMap<String, Node> nodeMaps = new ConcurrentHashMap<String, Node>();
 
     private volatile static ConfigurationBuilder builder;
 
@@ -106,11 +108,16 @@ public class ConfigurationBuilder {
             }
             flow.nodeList2NodeMap();
             Map<String,Node> externalRules =  ruleSetTranslator.getNodes();
+            nodeMaps.putAll(externalRules);
             logger.debug("Flow ["+flow.getId()+"] will meger its rules with external rules");
             mergeRulesFromExternal(flow,externalRules);
         }
         
         return builder;
+    }
+    
+    public Node getSingleNodeById(String nodeId) throws Exception{
+        return nodeMaps.get(nodeId);
     }
 
     public Node getFirstNodeByFlow(String flowId) throws Exception{

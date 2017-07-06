@@ -16,7 +16,10 @@ public class SingleThreadExecutorTest extends TestCase {
         event.add("name", "test");
         event.add("reg", "12312");
         try {
-           new SingleThreadExecutor().executeFlow(event);
+          // new SingleThreadExecutor().executeFlow(event);
+            new SingleThreadExecutor().executeSingleRule(event, "guessnumber");
+            
+           // System.out.println(new Random().nextInt(100));
         } catch (Exception e) {
             e.printStackTrace();
         }

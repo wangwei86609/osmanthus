@@ -49,7 +49,7 @@ public class FlowEngine{
         if(StringUtils.isBlank(nodeId)){
             return;
         }
-        Node node = getNodeById(event, nodeId);
+        Node node = getNodeOfFlowById(event, nodeId);
         if(node==null){
             return;
         }
@@ -58,7 +58,7 @@ public class FlowEngine{
         runFlowNode(event,nextNodeId);
     }
 
-    private Node getNodeById(Event event, String nodeId) throws Exception {
+    private Node getNodeOfFlowById(Event event, String nodeId) throws Exception {
         Node node=ConfigurationBuilder.getBuilder().getFlowMaps().get(event.getEventId()).getNodeMap().get(nodeId);
         return node;
     }
@@ -67,7 +67,18 @@ public class FlowEngine{
         if(StringUtils.isBlank(ruleId)){
             return;
         }
-        Node node=getNodeById(event, ruleId);
+        Node node=getNodeOfFlowById(event, ruleId);
+        if(node==null){
+            return;
+        }
+        nodeExecutorMap.get(node.getType()).execute(event, node);
+    }
+    
+    public void runSingleRule(Event event,String ruleId)throws Exception{
+        if(StringUtils.isBlank(ruleId)){
+            return;
+        }
+        Node node=ConfigurationBuilder.getBuilder().getSingleNodeById(ruleId);
         if(node==null){
             return;
         }

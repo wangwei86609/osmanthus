@@ -76,8 +76,23 @@ public class FileRuleSetTranslator implements NodeTranslator<String,Node>{
         return (Node)xs.fromXML(new FileInputStream(xmlfile));
     }
 
-    public Node getNode(String nodeId) throws Exception {
-        return getNodes().get(nodeId);
+    public Node getNode(final String nodeId) throws Exception {
+        File file=null;
+        if(StringUtils.isEmpty(ruleSetFolder)){
+            URL url=FileRuleSetTranslator.class.getClassLoader().getResource(ruleSetFolderName);
+            file = new File(url.getFile());
+        }else{
+            file=new File(ruleSetFolder);
+        }
+        File[] rsf=file.listFiles(new FilenameFilter(){
+            public boolean accept(File dir, String name) {
+                return name.equalsIgnoreCase(nodeId+ruleFileExtension);
+            }
+        });
+        if(rsf.length!=1){
+            throw new Exception("Don't find any rule or more than one by rule id["+nodeId+"]");
+        }
+        return loadRuleSetFromFile(rsf[0]);
     }
 
 }

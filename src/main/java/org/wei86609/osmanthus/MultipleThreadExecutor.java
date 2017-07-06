@@ -2,6 +2,7 @@ package org.wei86609.osmanthus;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.wei86609.osmanthus.event.Event;
@@ -73,6 +74,16 @@ public class MultipleThreadExecutor implements EventListener{
         if(executorService!=null){
             executorService.shutdown();
             executorService=null;
+        }
+    }
+    
+    public void awaitTermination(int timeout){
+        if(executorService!=null){
+            try {
+                executorService.awaitTermination(timeout, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                logger.error("Current multiple thread executor was interrupted", e);
+            }
         }
     }
 

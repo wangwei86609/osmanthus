@@ -16,8 +16,9 @@ public class MultipleThreadExecutorTest extends TestCase {
         event.add("name", "test");
         event.add("reg", "12312");
         try {
-           new MultipleThreadExecutor().addMultiEvent(event, null);
-           Thread.sleep(5000);
+            MultipleThreadExecutor executor= new MultipleThreadExecutor();
+            executor.addMultiEvent(event, null);
+            executor.awaitTermination(6);
         } catch (Exception e) {
             e.printStackTrace();
         }

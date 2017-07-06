@@ -2,14 +2,14 @@
 Osmanthus is a framework for rules & flow engines, a lightweight library and based on MVEL library. It is more convenient than drools, developers define rules & flows with XML file, it supplies below useful XML node:
 ### Rule node:
 * rule: a single rule, example as below:
-
+```xml
 <rule id="rulefirst" name="rulefirst" priority="0" exclusive="true" multipleTimes="5" valid="true">
     <condition><![CDATA[true]]></condition>
     <action><![CDATA[System.out.println("this is a rule,hah")]]></action>
 </rule>
-    
+```   
 * ruleset: set of rules, it extends the rule, so that means it has all attributes that rule has.
-
+```xml
 <ruleset name="set" id="set">
     <rule id="rulefirst" name="rulefirst" priority="0" exclusive="true" multipleTimes="5" valid="true">
         <condition><![CDATA[true]]></condition>
@@ -20,10 +20,10 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
         <action><![CDATA[System.out.println("this is the second rule,hah")]]></action>
     </rule>
 </ruleset>
-
+```
 ### Flow Control node:
 * split, one flow control node, also extends rule node, has more than one "constraint", but only one "constraint"'s condition is true.
-
+```xml
 <split id="split1" >
     <constraint toNodeId="card">
         <condition><![CDATA[fee>1]]></condition>
@@ -32,18 +32,18 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
         <condition><![CDATA[fee<=1]]></condition>
     </constraint>
 </split>
-
+```
 * parallel, also a flow control node, it controls the execution of rules with parallel model. if your defined flow XML file contains this sort of node, only run this flow with MultipleThreadExecutor Java class. one "line" node that means the system will create a new thread to execute its next nodes.
-
+```xml
 <parallel id="multiple">
     <line toNodeId="p1"/>
     <line toNodeId="p2"/>
 </parallel>
-
+```
 * merge, a merge node, that means this node can merge the execution results of multiple thread. You must define the "lineCnt" attribute, that means you should tell it the number of threads need to be merged.
+```xml
 <merge id="merge" fromNodeId="p3,p4" lineCnt="2" toNodeId="p5"/>
-
- supports very complex & complicated rules and logics. Such as: it can help us to implement decision tree and score card rules, execute multiple rules with parallel mode.
+```
 
 ## Core features
 

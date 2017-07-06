@@ -214,12 +214,6 @@ public class MultipleThreadExecutorTest extends TestCase {
  <rule id="guessnumber">
      <condition><![CDATA[true]]></condition>
      <action><![CDATA[
-     /**
-        * Sample MVEL 2.0 Script
-        * "Random Guess"
-        * by: Christopher Michael Brock
-    */
-
     import java.io.*;
     import java.util.Random;
     //

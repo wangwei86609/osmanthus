@@ -22,6 +22,45 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
 </ruleset>
 ```
 ### Flow Control node:
+* flow, whole flow control node, it can contain the rule,ruleset,split,paraller and merge node.
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<flow id="singleflow1">
+    <start id="start" toNodeId="feerule"/>
+    <ruleset id="feerule" fromNodeId="start" toNodeId="split1" external="true"/>
+    <split id="split1" fromNodeId="feerule">
+        <constraint toNodeId="card">
+            <condition><![CDATA[fee>1]]></condition>
+        </constraint>
+        <constraint toNodeId="end">
+            <condition><![CDATA[fee<=1]]></condition>
+        </constraint>
+    </split>
+    <ruleset id="card" fromNodeId="split1" toNodeId="p1" external="true"/>
+    <rule id="p1" fromNodeId="card" toNodeId="p2">
+        <condition><![CDATA[1==1]]></condition>
+        <action><![CDATA[rule1="p1"]]></action>
+    </rule>
+    <rule id="p2" fromNodeId="p1" toNodeId="p3">
+        <condition><![CDATA[2==2]]></condition>
+        <action><![CDATA[rule2="p2"]]></action>
+    </rule>
+    <rule id="p3" fromNodeId="p2" toNodeId="p4">
+        <condition><![CDATA[1==1]]></condition>
+        <action><![CDATA[rule3="p3"]]></action>
+    </rule>
+    <rule id="p4" fromNodeId="p3" toNodeId="p5">
+        <condition><![CDATA[2==2]]></condition>
+        <action><![CDATA[rule4="p4"]]></action>
+    </rule>
+    
+    <rule id="p5" fromNodeId="p4" toNodeId="end">
+        <condition><![CDATA[2==2]]></condition>
+        <action><![CDATA[rule5="p5"]]></action>
+    </rule>
+    <end id="end"/>
+</flow>
+```
 * split, one flow control node, also extends rule node, has more than one "constraint", but only one "constraint"'s condition is true.
 ```xml
 <split id="split1" >

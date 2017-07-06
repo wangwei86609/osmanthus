@@ -1,7 +1,9 @@
 ## What is the Osmanthus?
 Osmanthus is a framework for rules & flow engines, a lightweight library and based on MVEL library. It is more convenient than drools, developers define rules & flows with XML file, it supplies below useful XML node:
-### Rule node:
-* rule: a single rule, example as below:
+### Rule node
+
+* rule: a single rule
+
 ```xml
 <rule id="rulefirst" name="rulefirst" priority="0" exclusive="true" multipleTimes="5" valid="true">
     <condition><![CDATA[true]]></condition>
@@ -9,6 +11,7 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
 </rule>
 ```   
 * ruleset: set of rules, it extends the rule, so that means it has all attributes that rule has.
+
 ```xml
 <ruleset name="set" id="set">
     <rule id="rulefirst" name="rulefirst" priority="0" exclusive="true" multipleTimes="5" valid="true">
@@ -21,8 +24,11 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
     </rule>
 </ruleset>
 ```
-### Flow Control node:
+
+### Flow Control node
+
 * flow, whole flow control node, it can contain the rule,ruleset,split,paraller and merge node.
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <flow id="singleflow1">
@@ -61,7 +67,9 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
     <end id="end"/>
 </flow>
 ```
+
 * split, one flow control node, also extends rule node, has more than one "constraint", but only one "constraint"'s condition is true.
+
 ```xml
 <split id="split1" >
     <constraint toNodeId="card">
@@ -72,14 +80,18 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
     </constraint>
 </split>
 ```
+
 * parallel, also a flow control node, it controls the execution of rules with parallel model. if your defined flow XML file contains this sort of node, only run this flow with MultipleThreadExecutor Java class. one "line" node that means the system will create a new thread to execute its next nodes.
+
 ```xml
 <parallel id="multiple">
     <line toNodeId="p1"/>
     <line toNodeId="p2"/>
 </parallel>
 ```
+
 * merge, a merge node, that means this node can merge the execution results of multiple thread. You must define the "lineCnt" attribute, that means you should tell it the number of threads need to be merged.
+
 ```xml
 <merge id="merge" fromNodeId="p3,p4" lineCnt="2" toNodeId="p5"/>
 ```
@@ -94,7 +106,8 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
  * Parallel mode to execute multiple rules.
  * Support decision tree and score cards rules.
  
- ## Hello world-Score Card Rules
+
+## Hello world-Score Card Rules
 
 ### Rules in XML file:
 

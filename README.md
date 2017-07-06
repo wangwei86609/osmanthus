@@ -99,7 +99,7 @@ Event [eventId=null, threadId=null, model=FIRST, parameters={fee=500, isBlackNam
     <end id="end"/>
 </flow>
 ```
-
+### Java Code
 ```Java
 package org.wei86609.osmanthus;
 
@@ -178,6 +178,7 @@ If you want to run rules with multiple thead model, you have to use the "Paralle
     <end id="end"/>
 </flow>
 ```
+### Java Code
 ```Java
 package org.wei86609.osmanthus;
 
@@ -205,7 +206,7 @@ public class MultipleThreadExecutorTest extends TestCase {
     }
 }
 ```
- ## Run an example of "Guess Number"
+ ## Example of "Guess Number"
  The "Guess Number" is a classical example to help us to understand the rule engine, so here can also implement the example by Osmanthus.
  
  ```xml

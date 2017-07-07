@@ -3,24 +3,31 @@ package org.wei86609.osmanthus.node.executor;
 import org.apache.log4j.Logger;
 import org.mvel2.MVEL;
 import org.wei86609.osmanthus.event.Event;
+import org.wei86609.osmanthus.event.Supervisor;
 import org.wei86609.osmanthus.node.Node;
 import org.wei86609.osmanthus.node.Node.TYPE;
 import org.wei86609.osmanthus.node.Rule;
 
-public class RuleExecutor implements NodeExecutor {
+public class RuleExecutor extends NodeExecutor {
 
     private final static Logger logger = Logger.getLogger(RuleExecutor.class);
 
+    @Override
     public TYPE getType() {
         return TYPE.RULE;
     }
 
-    public String execute(Event event,Node node) throws Exception{
+    @Override
+    public String run(Event event,Node node,Supervisor supervisor) throws Exception{
         Rule rule=(Rule)node;
+        supervisor.setCondition(rule.getCondition());
+        supervisor.setAction(rule.getAction());
         boolean success=executeCondition(rule,event);
         if(success){
+            supervisor.setResultOfConditoin(success);
             logger.debug("The node["+node.getId()+"] of the event {"+event.getEventId()+"} condition=["+rule.getCondition()+"] is true and action=["+rule.getAction()+"]");
-            executeAction(rule,event);
+            Object obj=executeAction(rule,event);
+            supervisor.setResultOfAction(obj);
             return node.getToNodeId();
         }
         return null;
@@ -30,12 +37,8 @@ public class RuleExecutor implements NodeExecutor {
         return (Boolean)MVEL.eval(rule.getCondition(), event.getVars());
     }
 
-    protected void executeAction(Rule rule, Event event) {
-        MVEL.eval(rule.getAction(), event.getVars());
-    }
-
-    public void stop() {
-
+    protected Object executeAction(Rule rule, Event event) {
+        return MVEL.eval(rule.getAction(), event.getVars());
     }
 
 }

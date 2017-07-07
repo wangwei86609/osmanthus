@@ -35,7 +35,7 @@ public class FlowEngine{
 
     public Boolean execute(Event event,String nodeId) throws Exception {
         logger.debug("Osmanthus start to execute the event["+event+"]");
-        Node firstNode=ConfigurationBuilder.getBuilder().getFirstNodeByFlow(event.getEventId());
+        Node firstNode=ConfigurationBuilder.getBuilder().getFirstNodeByFlow(event.getFlowId());
         if(StringUtils.isBlank(nodeId)){
             nodeId=firstNode.getId();
             logger.debug("Node is blank, will get the first node ["+nodeId+"] of flow to execute.");
@@ -46,7 +46,7 @@ public class FlowEngine{
     }
 
     private void runFlowNode(Event event,String nodeId)throws Exception{
-        if(StringUtils.isBlank(nodeId)){
+        if(StringUtils.isBlank(nodeId) || !event.canRunNextNode()){
             return;
         }
         Node node = getNodeOfFlowById(event, nodeId);
@@ -59,7 +59,7 @@ public class FlowEngine{
     }
 
     private Node getNodeOfFlowById(Event event, String nodeId) throws Exception {
-        Node node=ConfigurationBuilder.getBuilder().getFlowMaps().get(event.getEventId()).getNodeMap().get(nodeId);
+        Node node=ConfigurationBuilder.getBuilder().getFlowMaps().get(event.getFlowId()).getNodeMap().get(nodeId);
         return node;
     }
     

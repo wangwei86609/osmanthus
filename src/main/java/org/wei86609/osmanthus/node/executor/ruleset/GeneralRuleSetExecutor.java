@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.wei86609.osmanthus.event.Event;
+import org.wei86609.osmanthus.event.Supervisor;
 import org.wei86609.osmanthus.node.Node;
 import org.wei86609.osmanthus.node.Node.TYPE;
 import org.wei86609.osmanthus.node.Rule;
@@ -14,7 +15,7 @@ import org.wei86609.osmanthus.node.executor.RuleExecutor;
 import org.wei86609.osmanthus.node.handler.RuleSetHandler;
 import org.wei86609.osmanthus.node.ruleset.RuleSet;
 
-public class GeneralRuleSetExecutor implements NodeExecutor{
+public class GeneralRuleSetExecutor extends NodeExecutor{
 
     private final static Logger logger = Logger.getLogger(GeneralRuleSetExecutor.class);
 
@@ -22,7 +23,8 @@ public class GeneralRuleSetExecutor implements NodeExecutor{
 
     private List<RuleSetHandler> ruleSetHandlers;
 
-    public String execute(Event event,Node node) throws Exception{
+    @Override
+    public String run(Event event,Node node,Supervisor supervisor) throws Exception{
         RuleSet ruleSet=(RuleSet)node;
         for(int i=0;i<ruleSetHandlers.size();i++){
             RuleSetHandler ruleSetHandler=ruleSetHandlers.get(i);
@@ -90,6 +92,7 @@ public class GeneralRuleSetExecutor implements NodeExecutor{
         this.ruleSetHandlers = ruleSetHandlers;
     }
 
+    @Override
     public TYPE getType() {
         return TYPE.SET;
     }
@@ -102,8 +105,5 @@ public class GeneralRuleSetExecutor implements NodeExecutor{
         this.ruleExecutor = ruleExecutor;
     }
 
-    public void stop() {
-
-    }
 
 }

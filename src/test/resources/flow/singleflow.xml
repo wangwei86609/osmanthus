@@ -30,7 +30,12 @@
     
     <rule id="p5" fromNodeId="p4" toNodeId="end">
         <condition><![CDATA[2==2]]></condition>
-        <action><![CDATA[rule5="p5"]]></action>
+        <action>
+        <![CDATA[
+			a = 10;
+			b = (a = a * 2) + 10;
+			return a;
+        ]]></action>
     </rule>
     <end id="end"/>
 </flow>

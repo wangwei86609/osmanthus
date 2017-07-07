@@ -6,7 +6,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 @XStreamAlias("node")
 public class Node {
 
-    public static enum TYPE {
+    public enum TYPE {
         EMPTY,RULE,SPLIT,SET,CARD,PARALLEL,MERGE
     }
 

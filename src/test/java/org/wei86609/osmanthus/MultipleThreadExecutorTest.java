@@ -8,7 +8,7 @@ public class MultipleThreadExecutorTest extends TestCase {
 
     public void testAddMultiEvent() {
         Event event=new Event();
-        event.setEventId("multiflow");
+        event.setFlowId("multiflow");
         event.add("salary", 5000);
         event.add("weight", 500);
         event.add("isBlackName", true);

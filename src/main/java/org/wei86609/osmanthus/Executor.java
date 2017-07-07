@@ -4,5 +4,5 @@ import org.wei86609.osmanthus.event.Event;
 
 public interface Executor<INPUT,OUTPUT> {
 
-    public OUTPUT execute(Event context,INPUT input) throws Exception;
+    public OUTPUT execute(Event context,INPUT input);
 }

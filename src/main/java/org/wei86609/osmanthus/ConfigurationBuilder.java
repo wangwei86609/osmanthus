@@ -72,7 +72,7 @@ public class ConfigurationBuilder {
         return builder;
     }
     
-    private void checkRulesOfFlow(){
+    protected void checkRulesOfFlow(){
         String to = "wanggiggle@163.com";
         String from = "wanggiggle@163.com";
         String host = "smtp.163.com";
@@ -100,7 +100,7 @@ public class ConfigurationBuilder {
         flowMaps.clear();
         Map<String,Flow> flows=flowFileTranslator.getNodes();
         flowMaps.putAll(flows);
-        checkRulesOfFlow();
+        //checkRulesOfFlow();
         Collection<Flow> fvalues=flowMaps.values();
         for(Flow flow:fvalues){
             if(flow.getNodes()==null ||flow.getNodes().isEmpty()){

@@ -1,9 +1,9 @@
-package com.github.wei86609.osmanthus.node;
+package com.github.wei86609.osmanthus.rule;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("start")
-public class Start extends Node{
+public class Start extends Rule{
 
     @Override
     public String getFromNodeId() {
@@ -12,6 +12,6 @@ public class Start extends Node{
 
     @Override
     public TYPE getType() {
-        return TYPE.EMPTY;
+        return TYPE.START;
     }
 }

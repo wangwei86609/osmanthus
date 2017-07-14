@@ -8,81 +8,81 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.github.wei86609.osmanthus.event.Event;
-import com.github.wei86609.osmanthus.node.Node;
-import com.github.wei86609.osmanthus.node.Node.TYPE;
-import com.github.wei86609.osmanthus.node.executor.NodeExecutor;
+import com.github.wei86609.osmanthus.rule.Rule;
+import com.github.wei86609.osmanthus.rule.Rule.TYPE;
+import com.github.wei86609.osmanthus.rule.executor.CommonExecutor;
 
 public class FlowEngine{
 
     private final static Logger logger = Logger.getLogger(FlowEngine.class);
 
-    private Map<TYPE,NodeExecutor> nodeExecutorMap;
+    private Map<TYPE,CommonExecutor> ruleExecutorMap;
 
-    public void addNodeExecutor(List<NodeExecutor> nodeExecutors){
-        if(nodeExecutorMap==null){
-            nodeExecutorMap=new HashMap<TYPE,NodeExecutor>();
+    public void addRuleExecutor(List<CommonExecutor> ruleExecutors){
+        if(ruleExecutorMap==null){
+            ruleExecutorMap=new HashMap<TYPE,CommonExecutor>();
         }
-        for(NodeExecutor nodeExecutor:nodeExecutors){
-            nodeExecutorMap.put(nodeExecutor.getType(), nodeExecutor);
+        for(CommonExecutor ruleExecutor:ruleExecutors){
+            ruleExecutorMap.put(ruleExecutor.getType(), ruleExecutor);
         }
     }
 
-    public void addNodeExecutor(NodeExecutor nodeExecutor){
-        if(nodeExecutorMap==null){
-            nodeExecutorMap=new HashMap<TYPE,NodeExecutor>();
+    public void addRuleExecutor(CommonExecutor ruleExecutor){
+        if(ruleExecutorMap==null){
+            ruleExecutorMap=new HashMap<TYPE,CommonExecutor>();
         }
-        nodeExecutorMap.put(nodeExecutor.getType(), nodeExecutor);
+        ruleExecutorMap.put(ruleExecutor.getType(), ruleExecutor);
     }
 
-    public Boolean execute(Event event,String nodeId) throws Exception {
+    public Boolean execute(Event event,String ruleId) throws Exception {
         logger.debug("Osmanthus start to execute the event["+event+"]");
-        Node firstNode=ConfigurationBuilder.getBuilder().getFirstNodeByFlow(event.getEventId());
-        if(StringUtils.isBlank(nodeId)){
-            nodeId=firstNode.getId();
-            logger.debug("Node is blank, will get the first node ["+nodeId+"] of flow to execute.");
+        Rule firstRule=ConfigurationBuilder.getBuilder().getFirstRuleByFlow(event.getFlowId());
+        if(StringUtils.isBlank(ruleId)){
+            ruleId=firstRule.getId();
+            logger.debug("Node is blank, will get the first rule ["+ruleId+"] of flow to execute.");
         }
-        runFlowNode(event,nodeId);
+        runFlowRule(event,ruleId);
         logger.debug("Osmanthus execute the event {"+event+"} end");
         return true;
     }
 
-    private void runFlowNode(Event event,String nodeId)throws Exception{
-        if(StringUtils.isBlank(nodeId)){
+    private void runFlowRule(Event event,String ruleId)throws Exception{
+        if(StringUtils.isBlank(ruleId)){
             return;
         }
-        Node node = getNodeOfFlowById(event, nodeId);
-        if(node==null){
+        Rule rule = getRuleOfFlowById(event, ruleId);
+        if(rule==null){
             return;
         }
-        String nextNodeId= nodeExecutorMap.get(node.getType()).execute(event, node);
-        logger.debug("Current node["+nodeId+"]'s next node id is["+nextNodeId+"]");
-        runFlowNode(event,nextNodeId);
+        String nextRuleId= ruleExecutorMap.get(rule.getType()).execute(event, rule);
+        logger.debug("Current rule["+ruleId+"]'s next rule id is["+nextRuleId+"]");
+        runFlowRule(event,nextRuleId);
     }
 
-    private Node getNodeOfFlowById(Event event, String nodeId) throws Exception {
-        return ConfigurationBuilder.getBuilder().getNodeByFlow(event.getFlowId(), nodeId);
+    private Rule getRuleOfFlowById(Event event, String nodeId) throws Exception {
+        return ConfigurationBuilder.getBuilder().getRuleByFlow(event.getFlowId(), nodeId);
     }
-    
+
     public void runRule(Event event,String ruleId)throws Exception{
         if(StringUtils.isBlank(ruleId)){
             return;
         }
-        Node node=getNodeOfFlowById(event, ruleId);
-        if(node==null){
+        Rule rule=getRuleOfFlowById(event, ruleId);
+        if(rule==null){
             return;
         }
-        nodeExecutorMap.get(node.getType()).execute(event, node);
+        ruleExecutorMap.get(rule.getType()).execute(event, rule);
     }
-    
+
     public void runExternalRule(Event event,String ruleId)throws Exception{
         if(StringUtils.isBlank(ruleId)){
             return;
         }
-        Node node=ConfigurationBuilder.getBuilder().getExternalNodeById(ruleId);
-        if(node==null){
+        Rule rule=ConfigurationBuilder.getBuilder().getExternalRuleById(ruleId);
+        if(rule==null){
             return;
         }
-        nodeExecutorMap.get(node.getType()).execute(event, node);
+        ruleExecutorMap.get(rule.getType()).execute(event, rule);
     }
 
 }

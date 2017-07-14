@@ -1,4 +1,4 @@
-package com.github.wei86609.osmanthus.node;
+package com.github.wei86609.osmanthus.rule;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,22 +9,26 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 @XStreamAlias("flow")
-public class Flow extends Node{
+public class Flow extends Rule{
 
-    private Map<String,Node> nodeMap=new HashMap<String,Node>();
-    
+    private Map<String,Rule> ruleMap;
+
     @XStreamAsAttribute
     private String model;
 
     @XStreamImplicit
-    private List<Node> nodes;
+    private List<Rule> rules;
 
-    public List<Node> getNodes() {
-        return nodes;
+    public List<Rule> getRules() {
+        return rules;
     }
 
-    public void setNodes(List<Node> nodes) {
-        this.nodes = nodes;
+    public void setRules(List<Rule> rules) {
+        this.rules = rules;
+    }
+
+    public Map<String, Rule> getRuleMap() {
+        return ruleMap;
     }
 
     public String getModel() {
@@ -35,17 +39,13 @@ public class Flow extends Node{
         this.model = model;
     }
 
-    public Map<String, Node> getNodeMap() {
-        return nodeMap;
-    }
 
-    public void setNodeMap(Map<String, Node> nodeMap) {
-        this.nodeMap = nodeMap;
-    }
-    
     public void init(){
-        for(Node node:nodes){
-            nodeMap.put(node.getId(), node);
+        if(ruleMap==null){
+            ruleMap=new HashMap<String,Rule>();
+        }
+        for(Rule rule:rules){
+            ruleMap.put(rule.getId(), rule);
         }
     }
 

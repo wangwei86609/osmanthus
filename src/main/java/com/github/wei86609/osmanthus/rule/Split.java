@@ -1,4 +1,4 @@
-package com.github.wei86609.osmanthus.node;
+package com.github.wei86609.osmanthus.rule;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 @XStreamAlias("split")
-public class Split extends Node{
+public class Split extends Rule{
 
     @XStreamImplicit
     private List<Constraint> constraints;

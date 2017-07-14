@@ -1,4 +1,4 @@
-package com.github.wei86609.osmanthus.node.handler;
+package com.github.wei86609.osmanthus.rule.handler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.github.wei86609.osmanthus.node.Node.TYPE;
-import com.github.wei86609.osmanthus.node.Rule;
-import com.github.wei86609.osmanthus.node.ruleset.RuleSet;
+import com.github.wei86609.osmanthus.rule.Rule;
+import com.github.wei86609.osmanthus.rule.Rule.TYPE;
+import com.github.wei86609.osmanthus.rule.ruleset.RuleSet;
 
 public class GeneralRuleSetHandler implements RuleSetHandler{
 

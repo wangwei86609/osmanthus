@@ -8,18 +8,18 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.github.wei86609.osmanthus.node.Flow;
-import com.github.wei86609.osmanthus.node.Node;
-import com.github.wei86609.osmanthus.node.executor.ruleset.GeneralRuleSetExecutor;
+import com.github.wei86609.osmanthus.rule.Flow;
+import com.github.wei86609.osmanthus.rule.Rule;
+import com.github.wei86609.osmanthus.rule.executor.ruleset.GeneralRuleSetExecutor;
 
-public class XmlFileNodeTranslator extends NodeTranslator{
+public class XmlFileRuleTranslator extends RuleTranslator{
 
     private String flowFolder;
 
     private String flowFolderName="flow";
 
     private String flowFileExtension=".xml";
-    
+
     private String ruleSetFolder;
 
     private String ruleSetFolderName="rule";
@@ -79,7 +79,7 @@ public class XmlFileNodeTranslator extends NodeTranslator{
         Map<String,Flow> flowMaps=new HashMap<String,Flow>();
         File[] rsf = findFile(flowFolder,flowFolderName,flowFileExtension);
         for(int i=0;i<rsf.length;i++){
-            Flow flow=xml2Node(rsf[i]);
+            Flow flow=xml2Flow(rsf[i]);
             if(flow!=null){
                 flow.init();
                 flowMaps.put(flow.getId(), flow);
@@ -105,22 +105,22 @@ public class XmlFileNodeTranslator extends NodeTranslator{
 
     @Override
     public Flow getFlowById(String flowId) throws Exception {
-        return null;
+        return getFlows().get(flowId);
     }
 
     @Override
-    public Node getExternalNodeById(String nodeId) throws Exception {
-        return null;
+    public Rule getExternalRuleById(String ruleId) throws Exception {
+        return getExternalRules().get(ruleId);
     }
 
     @Override
-    public Map<String, Node> getExternalNodes() throws Exception {
-        Map<String,Node> ruleMaps=new HashMap<String,Node>();
+    public Map<String, Rule> getExternalRules() throws Exception {
+        Map<String,Rule> ruleMaps=new HashMap<String,Rule>();
         File[] rsf = findFile(ruleSetFolder,ruleSetFolderName,ruleFileExtension);
         for(int i=0;i<rsf.length;i++){
-            Node node=xml2Rule(rsf[i]);
-            if(node!=null){
-                ruleMaps.put(node.getId(), node);
+            Rule rule=xml2Rule(rsf[i]);
+            if(rule!=null){
+                ruleMaps.put(rule.getId(), rule);
             }
         }
         return ruleMaps;

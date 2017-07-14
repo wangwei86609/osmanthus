@@ -1,4 +1,4 @@
-package com.github.wei86609.osmanthus.node.executor.ruleset;
+package com.github.wei86609.osmanthus.rule.executor.ruleset;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,33 +7,32 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.github.wei86609.osmanthus.event.Event;
-import com.github.wei86609.osmanthus.event.Supervisor;
-import com.github.wei86609.osmanthus.node.Node;
-import com.github.wei86609.osmanthus.node.Node.TYPE;
-import com.github.wei86609.osmanthus.node.Rule;
-import com.github.wei86609.osmanthus.node.executor.NodeExecutor;
-import com.github.wei86609.osmanthus.node.executor.RuleExecutor;
-import com.github.wei86609.osmanthus.node.handler.RuleSetHandler;
-import com.github.wei86609.osmanthus.node.ruleset.RuleSet;
+import com.github.wei86609.osmanthus.monitor.RuleInfo;
+import com.github.wei86609.osmanthus.rule.Rule;
+import com.github.wei86609.osmanthus.rule.Rule.TYPE;
+import com.github.wei86609.osmanthus.rule.executor.CommonExecutor;
+import com.github.wei86609.osmanthus.rule.executor.MvelRuleExecutor;
+import com.github.wei86609.osmanthus.rule.handler.RuleSetHandler;
+import com.github.wei86609.osmanthus.rule.ruleset.RuleSet;
 
-public class GeneralRuleSetExecutor extends NodeExecutor{
+public class GeneralRuleSetExecutor extends CommonExecutor{
 
     private final static Logger logger = Logger.getLogger(GeneralRuleSetExecutor.class);
 
-    private RuleExecutor ruleExecutor;
+    private MvelRuleExecutor ruleExecutor;
 
     private List<RuleSetHandler> ruleSetHandlers;
 
     @Override
-    public String run(Event event,Node node,Supervisor supervisor) throws Exception{
-        RuleSet ruleSet=(RuleSet)node;
+    public String run(Event event,Rule rule,RuleInfo supervisor) throws Exception{
+        RuleSet ruleSet=(RuleSet)rule;
         for(int i=0;i<ruleSetHandlers.size();i++){
             RuleSetHandler ruleSetHandler=ruleSetHandlers.get(i);
             if(ruleSetHandler.accept(ruleSet)){
                 ruleSetHandler.handle(ruleSet);
             }
         }
-        logger.debug("The ruleset["+node.getId()+"] of the event{"+event+"} has ["+ruleSet.getRules().size()+"] rules");
+        logger.debug("The ruleset["+ruleSet.getId()+"] of the event{"+event+"} has ["+ruleSet.getRules().size()+"] rules");
         run(event,ruleSet.getRules());
         return ruleSet.getToNodeId();
     }
@@ -98,11 +97,11 @@ public class GeneralRuleSetExecutor extends NodeExecutor{
         return TYPE.SET;
     }
 
-    public RuleExecutor getRuleExecutor() {
+    public MvelRuleExecutor getRuleExecutor() {
         return ruleExecutor;
     }
 
-    public void setRuleExecutor(RuleExecutor ruleExecutor) {
+    public void setRuleExecutor(MvelRuleExecutor ruleExecutor) {
         this.ruleExecutor = ruleExecutor;
     }
 

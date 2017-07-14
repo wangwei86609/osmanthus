@@ -14,19 +14,25 @@ public class Event {
     }
 
     private final Map<String, Object> parameters = new HashMap<String, Object>();
-    
-    private final List<Supervisor> supervisorList=new ArrayList<Supervisor>();
-    
+
     private String eventId;
-    
+
     private String flowId;
-    
-    private String threadId;
-    
+
+    private final List<Event> subEvents=new ArrayList<Event>();
+
     private MODEL model=MODEL.FIRST;
-    
+
     private boolean error;
-    
+
+    public List<Event> getSubEvents() {
+        return subEvents;
+    }
+
+    public void addSubEvent(Event subEvent){
+        subEvents.add(subEvent);
+    }
+
     public boolean canRunNextNode(){
         return (MODEL.FIRST.equals(model) && error)?false:true;
     }
@@ -39,13 +45,6 @@ public class Event {
         this.error = error;
     }
 
-    public String getThreadId() {
-        return threadId;
-    }
-
-    public void setThreadId(String threadId) {
-        this.threadId = threadId;
-    }
 
     public MODEL getModel() {
         return model;
@@ -80,18 +79,12 @@ public class Event {
         return parameters;
     }
 
-    public List<Supervisor> getSupervisorList() {
-        return supervisorList;
-    }
-    
-    public void addSupervisor(Supervisor supervisor) {
-        supervisorList.add(supervisor);
-    }
 
     @Override
     public String toString() {
-        return "Event [eventId=" + eventId + ", threadId=" + threadId
-                + ", model=" + model + ", parameters=" + parameters + "]";
+        return "Event [parameters=" + parameters +" eventId=" + eventId + ", flowId="
+                + flowId + ", subEvents'size=" + subEvents.size() + ", model=" + model
+                + ", error=" + error + "]";
     }
 
     public String getFlowId() {
@@ -102,10 +95,11 @@ public class Event {
         this.flowId = flowId;
     }
 
-    public Event createNewEvent(){
+    public Event copy(){
         Event event=new Event();
         event.setEventId(this.getEventId());
         event.setModel(this.getModel());
+        event.setFlowId(this.getFlowId());
         event.getVars().putAll(this.getVars());
         return event;
     }

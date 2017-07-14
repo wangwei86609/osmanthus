@@ -1,4 +1,4 @@
-package com.github.wei86609.osmanthus.node;
+package com.github.wei86609.osmanthus.rule;
 
 import java.util.Map.Entry;
 import java.util.Set;
@@ -8,7 +8,7 @@ import com.github.wei86609.osmanthus.event.Event;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("merge")
-public class Merge extends Node{
+public class Merge extends Rule{
 
     private final ConcurrentHashMap<String, Event> allEvents = new ConcurrentHashMap<String, Event>();
 
@@ -25,7 +25,7 @@ public class Merge extends Node{
     public synchronized boolean canMerge(Event event){
         lineCnt=lineCnt-1;
         if(lineCnt>0){
-            allEvents.put(event.getThreadId(), event);
+            allEvents.put(Thread.currentThread().getName(), event);
             return false;
         }else{
             Set<Entry<String,Event>> entries=allEvents.entrySet();

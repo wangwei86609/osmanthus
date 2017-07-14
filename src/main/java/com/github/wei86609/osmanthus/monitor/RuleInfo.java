@@ -1,6 +1,6 @@
-package com.github.wei86609.osmanthus.event;
+package com.github.wei86609.osmanthus.monitor;
 
-public class Supervisor {
+public class RuleInfo {
     
     private String eventId;
     

@@ -40,8 +40,8 @@ public class GeneralRuleSetExecutor extends NodeExecutor{
 
     /**
      * execute all rules by recursion
-     * @param context
-     * @param ruleSet
+     * @param event
+     * @param ruleList
      */
     protected void run(Event event, List<Rule> ruleList) {
        if(ruleList==null ||ruleList.isEmpty()){

@@ -136,31 +136,84 @@ Osmanthus is a framework for rules & flow engines, a lightweight library and bas
 ### Java code:
 
 ```java
-package org.wei86609.osmanthus;
-
-import org.wei86609.osmanthus.event.Event;
+package com.github.wei86609.osmanthus;
 
 import junit.framework.TestCase;
 
-public class SingleThreadExecutorTest extends TestCase {
+import com.github.wei86609.osmanthus.event.DefaultEventListener;
+import com.github.wei86609.osmanthus.event.Event;
+import com.github.wei86609.osmanthus.rule.executor.EndNodeExecutor;
+import com.github.wei86609.osmanthus.rule.executor.MvelRuleExecutor;
+import com.github.wei86609.osmanthus.rule.executor.SplitRuleExecutor;
+import com.github.wei86609.osmanthus.rule.executor.StartNodeExecutor;
+import com.github.wei86609.osmanthus.rule.executor.ruleset.GeneralRuleSetExecutor;
+import com.github.wei86609.osmanthus.rule.handler.GeneralRuleSetHandler;
+import com.github.wei86609.osmanthus.rule.intercepter.DefaultIntercepter;
+
+public class FlowEngineTest extends TestCase {
+
+/*    protected FlowEngine buildMultiFlowEngine() {
+        FlowEngine osmanthus = new FlowEngine();
+        //RuleExceutors
+        ParallelRuleExecutor parallelRuleExecutor=new ParallelRuleExecutor();
+        parallelRuleExecutor.setParallelEventListener(null);
+        MvelRuleExecutor ruleExecutor = new MvelRuleExecutor();
+        osmanthus.addNodeExecutor(new SplitRuleExecutor());
+        osmanthus.addNodeExecutor(new StartNodeExecutor());
+        osmanthus.addNodeExecutor(new MergeNodeExecutor());
+        osmanthus.addNodeExecutor(parallelRuleExecutor);
+        osmanthus.addNodeExecutor(ruleExecutor);
+        //RuleSetExcecutors
+        GeneralRuleSetHandler generalRuleSetHandler = new GeneralRuleSetHandler();
+        GeneralRuleSetExecutor generalRuleSetExecutor = new GeneralRuleSetExecutor();
+        generalRuleSetExecutor.setRuleExecutor(ruleExecutor);
+        generalRuleSetExecutor.addRuleSetHandler(generalRuleSetHandler);
+        osmanthus.addNodeExecutor(generalRuleSetExecutor);
+        return osmanthus;
+    }*/
+
+    protected FlowEngine buildSingleThreadFlowEngine() {
+        FlowEngine engine = new FlowEngine();
+        //add event listener and intercepter
+        engine.addEventListener(new DefaultEventListener());
+        engine.addRuleInterceptor(new DefaultIntercepter());
+        // add RuleExceutors
+        MvelRuleExecutor ruleExecutor = new MvelRuleExecutor();
+        engine.addRuleExecutor(new SplitRuleExecutor());
+        engine.addRuleExecutor(new StartNodeExecutor());
+        engine.addRuleExecutor(new EndNodeExecutor());
+        engine.addRuleExecutor(ruleExecutor);
+        // add RuleSetExcecutors
+        GeneralRuleSetExecutor generalRuleSetExecutor = new GeneralRuleSetExecutor();
+        generalRuleSetExecutor.setRuleExecutor(ruleExecutor);
+        generalRuleSetExecutor.addRuleSetHandler(new GeneralRuleSetHandler());
+        engine.addRuleExecutor(generalRuleSetExecutor);
+        return engine;
+    }
+
 
     public void testExecute() {
         Event event=new Event();
-        event.setEventId("singleflow1");
-        event.add("salary", 5000);
-        event.add("weight", 500);
-        event.add("isBlackName", true);
-        event.add("fee", 500);
-        event.add("name", "test");
-        event.add("reg", "12312");
+        event.setFlowId("singleflow1");
+        event.setEventId("eventid");
+        event.addVar("salary", 5000);
+        event.addVar("weight", 500);
+        event.addVar("isBlackName", true);
+        event.addVar("fee", 500);
+        event.addVar("name", "test");
+        event.addVar("reg", "12312");
+        event.addVar("idNum", "350823198809122917");
         try {
-           new SingleThreadExecutor().executeRule(event, "card");
+            buildSingleThreadFlowEngine().execute(event);
+
+            System.out.println(""+event);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 }
+
 ```
 
 ### Output log:
@@ -197,31 +250,6 @@ Event [eventId=null, threadId=null, model=FIRST, parameters={fee=500, isBlackNam
 ```
 ### Java Code
 ```Java
-package org.wei86609.osmanthus;
-
-import org.wei86609.osmanthus.event.Event;
-
-import junit.framework.TestCase;
-
-public class SingleThreadExecutorTest extends TestCase {
-
-    public void testExecute() {
-        Event event=new Event();
-        event.setEventId("flow1");
-        event.add("salary", 5000);
-        event.add("weight", 500);
-        event.add("isBlackName", true);
-        event.add("fee", 500);
-        event.add("name", "test");
-        event.add("reg", "12312");
-        try {
-           new SingleThreadExecutor().executeFlow(event);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-}
 
 ```
 ## Execute rules with Multiple Thread
@@ -275,31 +303,7 @@ If you want to run rules with multiple thead model, you have to use the "Paralle
 
 ### Java Code
 ```Java
-package org.wei86609.osmanthus;
 
-import org.wei86609.osmanthus.event.Event;
-
-import junit.framework.TestCase;
-
-public class MultipleThreadExecutorTest extends TestCase {
-
-    public void testAddMultiEvent() {
-        Event event=new Event();
-        event.setEventId("multiflow");
-        event.add("salary", 5000);
-        event.add("weight", 500);
-        event.add("isBlackName", true);
-        event.add("fee", 500);
-        event.add("name", "test");
-        event.add("reg", "12312");
-        try {
-           new MultipleThreadExecutor().addMultiEvent(event, null);
-           Thread.sleep(5000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
 ```
 ## Example of "Guess Number"
  The "Guess Number" is a classical example to help us to understand the rule engine, so here can also implement the example by Osmanthus.
@@ -347,34 +351,6 @@ public class MultipleThreadExecutorTest extends TestCase {
  ```
 ### Code example
  ```java
- package org.wei86609.osmanthus;
-
-import org.wei86609.osmanthus.event.Event;
-
-import junit.framework.TestCase;
-
-public class SingleThreadExecutorTest extends TestCase {
-
-    public void testExecute() {
-        Event event=new Event();
-        event.setEventId("singleflow1");
-        event.add("salary", 5000);
-        event.add("weight", 500);
-        event.add("isBlackName", true);
-        event.add("fee", 500);
-        event.add("name", "test");
-        event.add("reg", "12312");
-        try {
-          // new SingleThreadExecutor().executeFlow(event);
-            new SingleThreadExecutor().executeSingleRule(event, "guessnumber");
-            
-           // System.out.println(new Random().nextInt(100));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-}
 
  ```
  

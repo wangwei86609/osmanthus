@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <flow id="singleflow1">
-    <start id="start" toNodeId="feerule"/>
-    <ruleset id="feerule" fromNodeId="start" toNodeId="split1" external="true"/>
-    <split id="split1" fromNodeId="feerule">
-        <constraint toNodeId="card">
+    <start id="start" toRuleId="feerule"/>
+    <ruleset id="feerule" fromRuleId="start" toRuleId="split1" external="true"/>
+    <split id="split1" fromRuleId="feerule">
+        <constraint toRuleId="card">
             <condition><![CDATA[fee>1]]></condition>
         </constraint>
-        <constraint toNodeId="end">
+        <constraint toRuleId="end">
             <condition><![CDATA[fee<=1]]></condition>
         </constraint>
     </split>
-    <ruleset id="card" fromNodeId="split1" toNodeId="p1" external="true"/>
-    <rule id="p1" fromNodeId="card" toNodeId="p2">
+    <ruleset id="card" fromRuleId="split1" toRuleId="p1" external="true"/>
+    <rule id="p1" fromRuleId="card" toRuleId="p2">
         <condition><![CDATA[1==1]]></condition>
         <action><![CDATA[rule1="p1"]]></action>
     </rule>
-    <rule id="p2" fromNodeId="p1" toNodeId="p3">
+    <rule id="p2" fromRuleId="p1" toRuleId="p3">
         <condition><![CDATA[2==2]]></condition>
         <action><![CDATA[rule2="p2"]]></action>
     </rule>
-    <rule id="p3" fromNodeId="p2" toNodeId="p4">
+    <rule id="p3" fromRuleId="p2" toRuleId="p4">
         <condition><![CDATA[1==1]]></condition>
         <action><![CDATA[rule3="p3"]]></action>
     </rule>
-    <rule id="p4" fromNodeId="p3" toNodeId="p5">
+    <rule id="p4" fromRuleId="p3" toRuleId="p5">
         <condition><![CDATA[2==2]]></condition>
         <action><![CDATA[rule4="p4"]]></action>
     </rule>
     
-    <rule id="p5" fromNodeId="p4" toNodeId="end">
+    <rule id="p5" fromRuleId="p4" toRuleId="end">
         <condition><![CDATA[2==2]]></condition>
         <action>
         <![CDATA[

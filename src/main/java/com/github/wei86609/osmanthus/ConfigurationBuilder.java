@@ -109,8 +109,8 @@ public class ConfigurationBuilder {
             if(frule.isExternal()){
                 Rule rule=externalRules.get(key);
                 if(rule!=null){
-                    rule.setFromNodeId(frule.getFromNodeId());
-                    rule.setToNodeId(frule.getToNodeId());
+                    rule.setFromRuleId(frule.getFromRuleId());
+                    rule.setToRuleId(frule.getToRuleId());
                     flowMapNodes.put(key, rule);
                 }
             }

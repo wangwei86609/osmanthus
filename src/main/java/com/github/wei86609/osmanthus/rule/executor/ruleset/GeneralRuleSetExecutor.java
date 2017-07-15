@@ -32,7 +32,7 @@ public class GeneralRuleSetExecutor implements RuleExecutor{
         }
         logger.debug("The ruleset["+ruleSet.getId()+"] of the event{"+event+"} has ["+ruleSet.getRules().size()+"] rules");
         run(event,ruleSet.getRules());
-        return ruleSet.getToNodeId();
+        return ruleSet.getToRuleId();
     }
 
     /**

@@ -43,7 +43,7 @@ public class ParallelRuleExecutor implements RuleExecutor{
             for(Event eve:newEvents){
                 event.addSubEvent(eve);
             }
-            return rule.getToNodeId();
+            return rule.getToRuleId();
         }
         return null;
     }
@@ -52,7 +52,7 @@ public class ParallelRuleExecutor implements RuleExecutor{
         FutureTask<String> task=new FutureTask<String>(new Callable<String>(){
             public String call() throws Exception {
                 if(parallelEventListener!=null){
-                    parallelEventListener.startNewEvent(event, line.getToNodeId());
+                    parallelEventListener.startNewEvent(event, line.getToRuleId());
                     return "success";
                 }
                 return "failure";

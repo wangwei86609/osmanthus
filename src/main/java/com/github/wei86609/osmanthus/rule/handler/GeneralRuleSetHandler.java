@@ -16,13 +16,13 @@ public class GeneralRuleSetHandler implements RuleSetHandler{
     public void handle(RuleSet ruleSet) {
         List<Rule> rules = removeInvalidRules(ruleSet.getRules());
         sortRulesByPriority(rules);
-        setNextNode(ruleSet.getToNodeId(),rules);
+        setNextRule(ruleSet.getToRuleId(),rules);
         ruleSet.setRules(rules);
     }
 
-    private void setNextNode(String toNodeId,List<Rule> rules){
+    private void setNextRule(String toNodeId,List<Rule> rules){
         for(Rule rule:rules){
-            rule.setToNodeId(toNodeId);
+            rule.setToRuleId(toNodeId);
         }
     }
 

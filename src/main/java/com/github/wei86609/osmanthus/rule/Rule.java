@@ -18,10 +18,10 @@ public class Rule{
     private String name;
 
     @XStreamAsAttribute
-    private String fromNodeId;
+    private String fromRuleId;
 
     @XStreamAsAttribute
-    private String toNodeId;
+    private String toRuleId;
 
     @XStreamAsAttribute
     private String description;
@@ -32,20 +32,69 @@ public class Rule{
     @XStreamAsAttribute
     private boolean external;
 
-    public String getFromNodeId() {
-        return fromNodeId;
+    @XStreamAsAttribute
+    private int priority;
+
+    @XStreamAsAttribute
+    private String title;
+
+    @XStreamAsAttribute
+    private boolean exclusive;
+
+    @XStreamAsAttribute
+    private int multipleTimes;
+
+    @XStreamAsAttribute
+    private boolean valid=true;
+
+    private String condition;
+
+    private String action;
+
+    private String resultOfCondition;
+
+    private long startTime;
+
+    private long endTime;
+
+    public String getResultOfCondition() {
+        return resultOfCondition;
     }
 
-    public void setFromNodeId(String fromNodeId) {
-        this.fromNodeId = fromNodeId;
+    public void setResultOfCondition(String resultOfCondition) {
+        this.resultOfCondition = resultOfCondition;
     }
 
-    public String getToNodeId() {
-        return toNodeId;
+    public long getStartTime() {
+        return startTime;
     }
 
-    public void setToNodeId(String toNodeId) {
-        this.toNodeId = toNodeId;
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getFromRuleId() {
+        return fromRuleId;
+    }
+
+    public void setFromRuleId(String fromRuleId) {
+        this.fromRuleId = fromRuleId;
+    }
+
+    public String getToRuleId() {
+        return toRuleId;
+    }
+
+    public void setToRuleId(String toRuleId) {
+        this.toRuleId = toRuleId;
     }
 
     public String getId() {
@@ -93,24 +142,6 @@ public class Rule{
         this.type = type;
     }
 
-    @XStreamAsAttribute
-    private int priority;
-
-    @XStreamAsAttribute
-    private String title;
-
-    @XStreamAsAttribute
-    private boolean exclusive;
-
-    @XStreamAsAttribute
-    private int multipleTimes;
-
-    @XStreamAsAttribute
-    private boolean valid=true;
-
-    private String condition;
-
-    private String action;
 
     public String getCondition() {
         return condition;
@@ -175,7 +206,7 @@ public class Rule{
     @Override
     public String toString() {
         return "Rule [type=" + type + ", id=" + id + ", name=" + name
-                + ", fromNodeId=" + fromNodeId + ", toNodeId=" + toNodeId
+                + ", fromRuleId=" + fromRuleId + ", toRuleId=" + toRuleId
                 + ", description=" + description + ", timeout=" + timeout
                 + ", external=" + external + ", priority=" + priority
                 + ", title=" + title + ", exclusive=" + exclusive

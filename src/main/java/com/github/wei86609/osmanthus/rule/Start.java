@@ -6,7 +6,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public class Start extends Rule{
 
     @Override
-    public String getFromNodeId() {
+    public String getFromRuleId() {
         return null;
     }
 

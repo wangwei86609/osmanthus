@@ -24,7 +24,7 @@ public class MvelRuleExecutor implements RuleExecutor {
         if(success){
             logger.debug("The node["+rule.getId()+"] of the event {"+event.getEventId()+"} condition=["+rule.getCondition()+"] is true and action=["+rule.getAction()+"]");
             executeAction(rule,event);
-            return rule.getToNodeId();
+            return rule.getToRuleId();
         }
         return null;
     }

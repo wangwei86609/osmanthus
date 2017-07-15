@@ -54,6 +54,7 @@ public class FlowEngine{
             logger.debug("Node is blank, will get the first rule ["+firstRule.getId()+"] of flow to execute.");
         }
         runFlowRule(event,event.getCurrentRuleId());
+        event.setEndTime(System.currentTimeMillis());
         logger.debug("Osmanthus execute the event {"+event+"} end");
         return true;
     }

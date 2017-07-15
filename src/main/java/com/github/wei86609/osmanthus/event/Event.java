@@ -15,11 +15,15 @@ public class Event {
 
     private final Map<String, Object> variables = new HashMap<String, Object>();
 
+    private final List<Event> subEvents=new ArrayList<Event>();
+
     private String eventId;
 
     private String flowId;
 
-    private final List<Event> subEvents=new ArrayList<Event>();
+    private long startTime=System.currentTimeMillis();
+
+    private long endTime;
 
     private MODEL model=MODEL.FIRST;
 
@@ -88,6 +92,22 @@ public class Event {
         this.currentRuleId = currentRuleId;
     }
 
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
     @Override
     public String toString() {
         return "Event [variables=" + variables + ", eventId=" + eventId
@@ -110,6 +130,8 @@ public class Event {
         event.setModel(this.getModel());
         event.setFlowId(this.getFlowId());
         event.setCurrentRuleId(this.getCurrentRuleId());
+        event.setStartTime(this.startTime);
+        event.setEndTime(this.endTime);
         event.getVariables().putAll(this.getVariables());
         return event;
     }

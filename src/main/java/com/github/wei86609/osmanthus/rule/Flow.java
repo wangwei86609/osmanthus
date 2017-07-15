@@ -39,6 +39,14 @@ public class Flow extends Rule{
         this.model = model;
     }
 
+    public Rule getStartRule(){
+        for(Rule rule:rules){
+            if(TYPE.START.equals(rule.getType())){
+                return rule;
+            }
+        }
+        return null;
+    }
 
     public void init(){
         if(ruleMap==null){

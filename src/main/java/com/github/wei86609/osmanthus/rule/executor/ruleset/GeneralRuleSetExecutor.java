@@ -55,13 +55,13 @@ public class GeneralRuleSetExecutor implements RuleExecutor{
                success=true;
            }
        } catch (Exception e) {
-           logger.error("The node["+rule.getId()+"] of the event {"+event+"} occurs exception.",e);
+           logger.error("The rule["+rule.getId()+"] of the event ["+event.getEventId()+"] occurs exception.",e);
            if(!ruleList.isEmpty()){
                ruleList.remove(0);
            }
        }
        if (success && rule.isExclusive()) {
-           logger.debug("The node["+rule.getId()+"] of the event {"+event+"} is exclusive, remain nodes will not be executed.");
+           logger.debug("The rule["+rule.getId()+"] of the event ["+event.getEventId()+"] is exclusive, remain rules will not be executed.");
           return;
        }
 

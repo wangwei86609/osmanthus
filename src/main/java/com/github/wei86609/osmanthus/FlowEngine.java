@@ -9,10 +9,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.github.wei86609.osmanthus.event.Event;
-import com.github.wei86609.osmanthus.intercepter.Intercepter;
+import com.github.wei86609.osmanthus.event.EventListener;
+import com.github.wei86609.osmanthus.rule.Flow;
 import com.github.wei86609.osmanthus.rule.Rule;
 import com.github.wei86609.osmanthus.rule.Rule.TYPE;
 import com.github.wei86609.osmanthus.rule.executor.RuleExecutor;
+import com.github.wei86609.osmanthus.rule.intercepter.Intercepter;
 
 public class FlowEngine{
 
@@ -22,8 +24,11 @@ public class FlowEngine{
 
     private final List<Intercepter> ruleIntercepters;
 
+    private final List<EventListener> eventListeners;
+
     public FlowEngine(){
         ruleIntercepters=new ArrayList<Intercepter>();
+        eventListeners=new ArrayList<EventListener>();
     }
 
     public void addRuleExecutor(List<RuleExecutor> ruleExecutors){
@@ -47,15 +52,33 @@ public class FlowEngine{
     }
 
     public Boolean execute(Event event) throws Exception {
-        logger.debug("Osmanthus start to execute the event["+event+"]");
-        Rule firstRule=ConfigurationBuilder.getBuilder().getFirstRuleByFlow(event.getFlowId());
-        if(StringUtils.isBlank(event.getCurrentRuleId())){
-            event.setCurrentRuleId(firstRule.getId());
-            logger.debug("Node is blank, will get the first rule ["+firstRule.getId()+"] of flow to execute.");
+        try {
+            logger.debug("Start to execute the event["+event+"]");
+            //will trigger once the event initial
+            initEvent(event);
+            //get flow
+            Flow flow=ConfigurationBuilder.getBuilder().getFlowById(event.getFlowId());
+            if(flow==null){
+                logger.error("Don't find any flow["+event.getFlowId()+"] the event["+event.getEventId()+"]");
+                return false;
+            }
+            Rule firstRule=flow.getStartRule();
+            if(firstRule==null){
+                logger.error("Don't find one start rule of the flow["+event.getFlowId()+"] in the event["+event.getEventId()+"]");
+                return false;
+            }
+            if(StringUtils.isBlank(event.getCurrentRuleId())){
+                event.setCurrentRuleId(firstRule.getId());
+                logger.debug("Rule is blank, will get the first rule ["+firstRule.getId()+"] of flow to execute.");
+            }
+            runFlowRule(event,event.getCurrentRuleId());
+            //will trigger once the event complete
+            completeEvent(event);
+            logger.debug("Execute the event {"+event.getEventId()+"} end");
+        } catch (Exception e) {
+            this.exceptionEvent(event, e);
+            throw e;
         }
-        runFlowRule(event,event.getCurrentRuleId());
-        event.setEndTime(System.currentTimeMillis());
-        logger.debug("Osmanthus execute the event {"+event+"} end");
         return true;
     }
 
@@ -79,6 +102,31 @@ public class FlowEngine{
             throw e;
         }
     }
+
+    private void exceptionEvent(Event event, Exception e) {
+        for(EventListener eventListener :eventListeners){
+            if(eventListener!=null){
+                eventListener.exception(event,e);
+            }
+        }
+    }
+
+    private void initEvent(Event event) {
+        for(EventListener eventListener :eventListeners){
+            if(eventListener!=null){
+                eventListener.init(event);
+            }
+        }
+    }
+
+    private void completeEvent(Event event) {
+        for(EventListener eventListener :eventListeners){
+            if(eventListener!=null){
+                eventListener.complete(event);
+            }
+        }
+    }
+
 
     private void exceptionIntercepter(Event event, Rule rule, Exception e) {
         for(Intercepter intercepter :ruleIntercepters){
@@ -117,13 +165,19 @@ public class FlowEngine{
             return;
         }
         try {
+            //will trigger once the event initial
+            initEvent(event);
+            //set current rule id
             event.setCurrentRuleId(ruleId);
             beforeIntercepter(event, rule);
             String nextRuleId= ruleExecutorMap.get(rule.getType()).execute(event, rule);
             logger.debug("Current rule["+ruleId+"]'s next rule id is["+nextRuleId+"]");
             afterIntercepter(event, rule);
+            //will trigger once the event complete
+            completeEvent(event);
         } catch (Exception e) {
             exceptionIntercepter(event, rule, e);
+            exceptionEvent(event, e);
             throw e;
         }
     }
@@ -137,13 +191,19 @@ public class FlowEngine{
             return;
         }
         try {
+            //will trigger once the event initial
+            initEvent(event);
+            //set current rule id
             event.setCurrentRuleId(ruleId);
             beforeIntercepter(event, rule);
             String nextRuleId= ruleExecutorMap.get(rule.getType()).execute(event, rule);
             logger.debug("Current rule["+ruleId+"]'s next rule id is["+nextRuleId+"]");
             afterIntercepter(event, rule);
+            //will trigger once the event complete
+            completeEvent(event);
         } catch (Exception e) {
             exceptionIntercepter(event, rule, e);
+            exceptionEvent(event, e);
             throw e;
         }
     }

@@ -22,7 +22,7 @@ public class MvelRuleExecutor implements RuleExecutor {
     public String execute(Event event,Rule rule) throws Exception{
         boolean success=executeCondition(rule,event);
         if(success){
-            logger.debug("The node["+rule.getId()+"] of the event {"+event.getEventId()+"} condition=["+rule.getCondition()+"] is true and action=["+rule.getAction()+"]");
+            logger.debug("The result condition=[true] of the ["+rule.getCondition()+"] in the rule["+rule.getId()+"] of the event ["+event.getEventId()+"] ");
             executeAction(rule,event);
             return rule.getToRuleId();
         }

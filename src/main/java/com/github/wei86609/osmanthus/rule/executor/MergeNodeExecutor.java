@@ -14,7 +14,6 @@ public class MergeNodeExecutor implements RuleExecutor{
 
     public String execute(Event event, Rule rule) throws Exception {
         Merge merge=(Merge)rule;
-        logger.debug("Merge["+merge.getId()+"] of the event {"+event+"} has ["+merge.getLineCnt()+"] threads need to merge");
         if(merge.canMerge(event)){
             logger.debug("Merge["+merge.getId()+"] of the event {"+event+"} will merge all threads");
             return merge.getToRuleId();

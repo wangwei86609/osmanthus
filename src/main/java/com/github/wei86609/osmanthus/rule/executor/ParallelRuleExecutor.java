@@ -7,8 +7,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
-
 import com.github.wei86609.osmanthus.event.Event;
 import com.github.wei86609.osmanthus.event.ParallelEventListener;
 import com.github.wei86609.osmanthus.rule.Line;
@@ -18,15 +16,12 @@ import com.github.wei86609.osmanthus.rule.Rule.TYPE;
 
 public class ParallelRuleExecutor implements RuleExecutor{
 
-    private final static Logger logger = Logger.getLogger(ParallelRuleExecutor.class);
-
     private ParallelEventListener parallelEventListener;
 
     private ExecutorService threadPool;
 
     public String execute(Event event, Rule rule) throws Exception {
         Parallel parallel=(Parallel)rule;
-        logger.debug("Parallel["+parallel.getId()+"] of the event {"+event.getEventId()+"} has ["+parallel.getLines().size()+"] thread lines");
         List<Line> lines=parallel.getLines();
         ArrayList<FutureTask<String>> tasks=new ArrayList<FutureTask<String>>();
         ArrayList<Event> newEvents=new ArrayList<Event>();

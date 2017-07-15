@@ -21,7 +21,9 @@ public class Event {
 
     private String flowId;
 
-    private long startTime=System.currentTimeMillis();
+    private String flowName;
+
+    private long startTime;
 
     private long endTime;
 
@@ -108,6 +110,14 @@ public class Event {
         this.endTime = endTime;
     }
 
+    public String getFlowName() {
+        return flowName;
+    }
+
+    public void setFlowName(String flowName) {
+        this.flowName = flowName;
+    }
+
     @Override
     public String toString() {
         return "Event [variables=" + variables + ", eventId=" + eventId
@@ -132,6 +142,7 @@ public class Event {
         event.setCurrentRuleId(this.getCurrentRuleId());
         event.setStartTime(this.startTime);
         event.setEndTime(this.endTime);
+        event.setFlowName(this.flowName);
         event.getVariables().putAll(this.getVariables());
         return event;
     }

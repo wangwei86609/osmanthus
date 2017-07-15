@@ -16,16 +16,15 @@ public class SplitRuleExecutor implements RuleExecutor{
 
     public String execute(Event event, Rule rule) throws Exception {
         Split split=(Split)rule;
-        logger.debug("Split["+split.getId()+"] of the event {"+event.getEventId()+"} has ["+split.getConstraints().size()+"] Constraints");
         for(Constraint c:split.getConstraints()){
             if(executeCondition(c.getCondition(),event)){
-                logger.debug("Split["+split.getId()+"] of the event {"+event.getEventId()+"} Constraint's condition ["+c.getCondition()+"] result is true, will link to rule["+c.getToRuleId()+"].");
+                logger.debug("In the event ["+event.getEventId()+"],  the result of condition ["+c.getCondition()+"] is [true] of the plit["+split.getId()+"], will link to rule["+c.getToRuleId()+"].");
                 return c.getToRuleId();
             }
         }
         if(StringUtils.isEmpty(split.getToRuleId())){
-            logger.error("The node["+split.getId()+"] of the event {"+event.getEventId()+"} Seems constraint's conditions are all mismatch.");
-            throw new Exception("The node["+split.getId()+"] of the event {"+event.getEventId()+"} Seems constraint's conditions are all mismatch.");
+            logger.error("The split ["+split.getId()+"] of the event ["+event.getEventId()+"] Seems constraint's conditions are all mismatch.");
+            throw new Exception("The split ["+split.getId()+"] of the event ["+event.getEventId()+"] Seems constraint's conditions are all mismatch.");
         }
         return null;
     }

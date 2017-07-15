@@ -1,4 +1,4 @@
-package com.github.wei86609.osmanthus.intercepter;
+package com.github.wei86609.osmanthus.rule.intercepter;
 
 import com.github.wei86609.osmanthus.event.Event;
 import com.github.wei86609.osmanthus.rule.Rule;

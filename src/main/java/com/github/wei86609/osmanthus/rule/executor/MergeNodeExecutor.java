@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.mvel2.MVEL;
 
 import com.github.wei86609.osmanthus.event.Event;
-import com.github.wei86609.osmanthus.rule.Merge;
 import com.github.wei86609.osmanthus.rule.Rule;
 import com.github.wei86609.osmanthus.rule.Rule.TYPE;
 
@@ -13,11 +12,7 @@ public class MergeNodeExecutor implements RuleExecutor{
     private final static Logger logger = Logger.getLogger(MergeNodeExecutor.class);
 
     public String execute(Event event, Rule rule) throws Exception {
-        Merge merge=(Merge)rule;
-        if(merge.canMerge(event)){
-            logger.debug("Merge["+merge.getId()+"] of the event {"+event+"} will merge all threads");
-            return merge.getToRuleId();
-        }
+        logger.debug("Merge rule ["+rule.getId()+"] executed");
         return null;
     }
 

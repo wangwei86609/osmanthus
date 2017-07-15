@@ -65,8 +65,11 @@ public class FlowEngineTest extends TestCase {
         event.add("fee", 500);
         event.add("name", "test");
         event.add("reg", "12312");
+        event.add("idNum", "340823198609122917");
         try {
             buildSingleThreadFlowEngine().execute(event);
+
+            System.out.println("================="+event);
         } catch (Exception e) {
             e.printStackTrace();
         }

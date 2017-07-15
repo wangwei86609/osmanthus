@@ -120,10 +120,11 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event [variables=" + variables + ", eventId=" + eventId
-                + ", flowId=" + flowId + ", subEvents=" + subEvents
-                + ", model=" + model + ", error=" + error + ", currentRuleId="
-                + currentRuleId + "]";
+        return "Event [variables=" + variables + ", subEvents=" + subEvents
+                + ", eventId=" + eventId + ", flowId=" + flowId + ", flowName="
+                + flowName + ", startTime=" + startTime + ", endTime="
+                + endTime + ", model=" + model + ", error=" + error
+                + ", currentRuleId=" + currentRuleId + "]";
     }
 
     public String getFlowId() {

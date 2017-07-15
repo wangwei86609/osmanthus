@@ -25,7 +25,19 @@
     </rule>
     <rule id="p4" fromRuleId="p3" toRuleId="p5">
         <condition><![CDATA[2==2]]></condition>
-        <action><![CDATA[rule4="p4"]]></action>
+        <action><![CDATA[
+                import java.text.SimpleDateFormat;
+                import java.util.Date;
+                
+                def getAgeFromIdCardNo(idNum){
+				        int leh = idNum.length();
+				        String year= idNum.substring(6, 10);
+			            SimpleDateFormat df = new SimpleDateFormat("yyyy");
+				        int age=Integer.parseInt(df.format(new Date()))-Integer.parseInt(year);
+				        return age;
+                }
+                age=getAgeFromIdCardNo(idNum);
+        ]]></action>
     </rule>
     
     <rule id="p5" fromRuleId="p4" toRuleId="end">

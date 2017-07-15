@@ -11,7 +11,7 @@
         </constraint>
     </split>
     <ruleset id="card" fromRuleId="split1" toRuleId="mlines" external="true"/>
-    <parallel id="mlines" fromRuleId="card">
+    <parallel id="mlines" fromRuleId="card" sync="true" timeout="100" toRuleId="merge">
         <line toRuleId="p1"/>
         <line toRuleId="p2"/>
     </parallel>
@@ -23,7 +23,7 @@
         <condition><![CDATA[2==2]]></condition>
         <action><![CDATA[rule2="p2"]]></action>
     </rule>
-    <parallel id="mlines2" fromRuleId="p2">
+    <parallel id="mlines2" fromRuleId="p2" sync="true" timeout="100" toRuleId="merge">
         <line toRuleId="p3"/>
         <line toRuleId="p4"/>
     </parallel>

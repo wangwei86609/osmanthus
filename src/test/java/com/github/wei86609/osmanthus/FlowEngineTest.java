@@ -1,11 +1,16 @@
 package com.github.wei86609.osmanthus;
 
+import java.util.concurrent.Executors;
+
 import junit.framework.TestCase;
 
 import com.github.wei86609.osmanthus.event.DefaultEventListener;
 import com.github.wei86609.osmanthus.event.Event;
+import com.github.wei86609.osmanthus.event.ParallelEventListener;
 import com.github.wei86609.osmanthus.rule.executor.EndNodeExecutor;
+import com.github.wei86609.osmanthus.rule.executor.MergeNodeExecutor;
 import com.github.wei86609.osmanthus.rule.executor.MvelRuleExecutor;
+import com.github.wei86609.osmanthus.rule.executor.ParallelRuleExecutor;
 import com.github.wei86609.osmanthus.rule.executor.SplitRuleExecutor;
 import com.github.wei86609.osmanthus.rule.executor.StartNodeExecutor;
 import com.github.wei86609.osmanthus.rule.executor.ruleset.GeneralRuleSetExecutor;
@@ -14,25 +19,34 @@ import com.github.wei86609.osmanthus.rule.intercepter.DefaultIntercepter;
 
 public class FlowEngineTest extends TestCase {
 
-/*    protected FlowEngine buildMultiFlowEngine() {
-        FlowEngine osmanthus = new FlowEngine();
+   protected FlowEngine buildMultiThreadFlowEngine() {
+        final FlowEngine engine = new FlowEngine();
         //RuleExceutors
         ParallelRuleExecutor parallelRuleExecutor=new ParallelRuleExecutor();
-        parallelRuleExecutor.setParallelEventListener(null);
         MvelRuleExecutor ruleExecutor = new MvelRuleExecutor();
-        osmanthus.addNodeExecutor(new SplitRuleExecutor());
-        osmanthus.addNodeExecutor(new StartNodeExecutor());
-        osmanthus.addNodeExecutor(new MergeNodeExecutor());
-        osmanthus.addNodeExecutor(parallelRuleExecutor);
-        osmanthus.addNodeExecutor(ruleExecutor);
+        engine.addRuleExecutor(new SplitRuleExecutor());
+        engine.addRuleExecutor(new StartNodeExecutor());
+        engine.addRuleExecutor(new MergeNodeExecutor());
+        engine.addRuleExecutor(new EndNodeExecutor());
+        engine.addRuleExecutor(parallelRuleExecutor);
+        engine.addRuleExecutor(ruleExecutor);
         //RuleSetExcecutors
-        GeneralRuleSetHandler generalRuleSetHandler = new GeneralRuleSetHandler();
         GeneralRuleSetExecutor generalRuleSetExecutor = new GeneralRuleSetExecutor();
         generalRuleSetExecutor.setRuleExecutor(ruleExecutor);
-        generalRuleSetExecutor.addRuleSetHandler(generalRuleSetHandler);
-        osmanthus.addNodeExecutor(generalRuleSetExecutor);
-        return osmanthus;
-    }*/
+        generalRuleSetExecutor.addRuleSetHandler(new GeneralRuleSetHandler());
+        engine.addRuleExecutor(generalRuleSetExecutor);
+        //add event listener & thread pool for executer of parallel rule
+        parallelRuleExecutor.setParallelEventListener(new ParallelEventListener(){
+            public void startNewEvent(Event event, String ruleId) throws Exception{
+                event.setCurrentRuleId(ruleId);
+                engine.execute(event);
+            }
+        });
+        parallelRuleExecutor.setThreadPool(Executors.newCachedThreadPool());
+        return engine;
+    }
+
+
 
     protected FlowEngine buildSingleThreadFlowEngine() {
         FlowEngine engine = new FlowEngine();
@@ -54,7 +68,7 @@ public class FlowEngineTest extends TestCase {
     }
 
 
-    public void testExecute() {
+    public void testSingleThreadExecute() {
         Event event=new Event();
         event.setFlowId("singleflow1");
         event.setEventId("eventid");
@@ -67,6 +81,26 @@ public class FlowEngineTest extends TestCase {
         event.addVar("idNum", "350823198809122917");
         try {
             buildSingleThreadFlowEngine().execute(event);
+
+            System.out.println(""+event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void testMultiThreadExecute() {
+        Event event=new Event();
+        event.setFlowId("multiflow");
+        event.setEventId("muleventid");
+        event.addVar("salary", 5000);
+        event.addVar("weight", 500);
+        event.addVar("isBlackName", true);
+        event.addVar("fee", 500);
+        event.addVar("name", "test");
+        event.addVar("reg", "12312");
+        event.addVar("idNum", "350823198809122917");
+        try {
+            buildMultiThreadFlowEngine().execute(event);
 
             System.out.println(""+event);
         } catch (Exception e) {

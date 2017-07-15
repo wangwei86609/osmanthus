@@ -20,8 +20,6 @@ public class ConfigurationBuilder {
 
     private final ConcurrentHashMap<String, Flow> flowMaps = new ConcurrentHashMap<String, Flow>();
 
-    private final ConcurrentHashMap<String, Rule> ruleMaps = new ConcurrentHashMap<String, Rule>();
-
     private volatile static ConfigurationBuilder builder;
 
     private ConfigurationBuilder(){
@@ -59,25 +57,29 @@ public class ConfigurationBuilder {
             if(flow.getRules()==null ||flow.getRules().isEmpty()){
                 continue;
             }
-            Map<String,Rule> externalRules =ruleTranslator.getExternalRules();
-            if(externalRules==null ||externalRules.isEmpty()){
-                break;
-            }
-            ruleMaps.putAll(externalRules);
-            logger.debug("Flow ["+flow.getId()+"] will meger its rules with external rules");
-            mergeRulesFromExternal(flow,externalRules);
+            handleFlow(flow);
         }
         return builder;
     }
 
+    private void handleFlow(Flow flow) throws Exception {
+        Map<String,Rule> externalRules =ruleTranslator.getExternalRules();
+        if(externalRules==null ||externalRules.isEmpty()){
+            return;
+        }
+        logger.debug("Flow ["+flow.getId()+"] will meger its rules with external rules");
+        mergeRulesFromExternal(flow,externalRules);
+    }
+
     public Rule getExternalRuleById(String ruleId) throws Exception{
-        return ruleMaps.get(ruleId);
+        return ruleTranslator.getExternalRules().get(ruleId);
     }
 
     public Flow getFlowById(String flowId) throws Exception{
         if(!flowMaps.containsKey(flowId)){
             Flow flow= ruleTranslator.getFlowById(flowId);
             if(flow!=null){
+                handleFlow(flow);
                 flowMaps.put(flow.getId(), flow);
             }
         }
@@ -119,7 +121,6 @@ public class ConfigurationBuilder {
 
     public void destroy(){
         flowMaps.clear();
-        ruleMaps.clear();
     }
 
 }

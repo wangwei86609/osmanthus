@@ -53,7 +53,6 @@ public class FlowEngine{
 
     public Boolean execute(Event event) throws Exception {
         try {
-            logger.debug("Start to execute the event["+event+"]");
             //will trigger once the event initial
             initEvent(event);
             //get flow
@@ -74,7 +73,6 @@ public class FlowEngine{
             runFlowRule(event,event.getCurrentRuleId());
             //will trigger once the event complete
             completeEvent(event);
-            logger.debug("Execute the event {"+event.getEventId()+"} end");
         } catch (Exception e) {
             this.exceptionEvent(event, e);
             throw e;

@@ -7,15 +7,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.github.wei86609.osmanthus.event.Event;
-import com.github.wei86609.osmanthus.monitor.RuleInfo;
 import com.github.wei86609.osmanthus.rule.Rule;
 import com.github.wei86609.osmanthus.rule.Rule.TYPE;
-import com.github.wei86609.osmanthus.rule.executor.CommonExecutor;
 import com.github.wei86609.osmanthus.rule.executor.MvelRuleExecutor;
+import com.github.wei86609.osmanthus.rule.executor.RuleExecutor;
 import com.github.wei86609.osmanthus.rule.handler.RuleSetHandler;
 import com.github.wei86609.osmanthus.rule.ruleset.RuleSet;
 
-public class GeneralRuleSetExecutor extends CommonExecutor{
+public class GeneralRuleSetExecutor implements RuleExecutor{
 
     private final static Logger logger = Logger.getLogger(GeneralRuleSetExecutor.class);
 
@@ -23,8 +22,7 @@ public class GeneralRuleSetExecutor extends CommonExecutor{
 
     private List<RuleSetHandler> ruleSetHandlers;
 
-    @Override
-    public String run(Event event,Rule rule,RuleInfo supervisor) throws Exception{
+    public String execute(Event event,Rule rule) throws Exception{
         RuleSet ruleSet=(RuleSet)rule;
         for(int i=0;i<ruleSetHandlers.size();i++){
             RuleSetHandler ruleSetHandler=ruleSetHandlers.get(i);
@@ -92,7 +90,6 @@ public class GeneralRuleSetExecutor extends CommonExecutor{
         this.ruleSetHandlers = ruleSetHandlers;
     }
 
-    @Override
     public TYPE getType() {
         return TYPE.SET;
     }
@@ -105,5 +102,8 @@ public class GeneralRuleSetExecutor extends CommonExecutor{
         this.ruleExecutor = ruleExecutor;
     }
 
+    public void stop() {
+
+    }
 
 }

@@ -4,17 +4,15 @@ import org.apache.log4j.Logger;
 import org.mvel2.MVEL;
 
 import com.github.wei86609.osmanthus.event.Event;
-import com.github.wei86609.osmanthus.monitor.RuleInfo;
 import com.github.wei86609.osmanthus.rule.Merge;
 import com.github.wei86609.osmanthus.rule.Rule;
 import com.github.wei86609.osmanthus.rule.Rule.TYPE;
 
-public class MergeNodeExecutor extends CommonExecutor{
+public class MergeNodeExecutor implements RuleExecutor{
 
     private final static Logger logger = Logger.getLogger(MergeNodeExecutor.class);
 
-    @Override
-    public String run(Event event, Rule rule,RuleInfo ruleInfo) throws Exception {
+    public String execute(Event event, Rule rule) throws Exception {
         Merge merge=(Merge)rule;
         logger.debug("Merge["+merge.getId()+"] of the event {"+event+"} has ["+merge.getLineCnt()+"] threads need to merge");
         if(merge.canMerge(event)){
@@ -25,12 +23,15 @@ public class MergeNodeExecutor extends CommonExecutor{
     }
 
     protected boolean executeCondition(String condition, Event context) {
-        return (Boolean)MVEL.eval(condition, context.getVars());
+        return (Boolean)MVEL.eval(condition, context.getVariables());
     }
 
-    @Override
     public TYPE getType() {
         return TYPE.MERGE;
+    }
+
+    public void stop() {
+
     }
 
 }

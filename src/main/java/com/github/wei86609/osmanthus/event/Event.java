@@ -13,7 +13,7 @@ public class Event {
         FIRST,LAST,WEIGHT
     }
 
-    private final Map<String, Object> parameters = new HashMap<String, Object>();
+    private final Map<String, Object> variables = new HashMap<String, Object>();
 
     private String eventId;
 
@@ -24,6 +24,8 @@ public class Event {
     private MODEL model=MODEL.FIRST;
 
     private boolean error;
+
+    private String currentRuleId;
 
     public List<Event> getSubEvents() {
         return subEvents;
@@ -45,7 +47,6 @@ public class Event {
         this.error = error;
     }
 
-
     public MODEL getModel() {
         return model;
     }
@@ -64,27 +65,35 @@ public class Event {
 
     public void add(String key, Object value) {
         if (!StringUtils.isEmpty(key)) {
-            parameters.put(key, value);
+            variables.put(key, value);
         }
     }
 
     public Object get(String key) {
         if (!StringUtils.isEmpty(key)) {
-            return parameters.get(key);
+            return variables.get(key);
         }
         return null;
     }
 
-    public Map<String, Object> getVars() {
-        return parameters;
+    public Map<String, Object> getVariables() {
+        return variables;
     }
 
+    public String getCurrentRuleId() {
+        return currentRuleId;
+    }
+
+    public void setCurrentRuleId(String currentRuleId) {
+        this.currentRuleId = currentRuleId;
+    }
 
     @Override
     public String toString() {
-        return "Event [parameters=" + parameters +" eventId=" + eventId + ", flowId="
-                + flowId + ", subEvents'size=" + subEvents.size() + ", model=" + model
-                + ", error=" + error + "]";
+        return "Event [variables=" + variables + ", eventId=" + eventId
+                + ", flowId=" + flowId + ", subEvents=" + subEvents
+                + ", model=" + model + ", error=" + error + ", currentRuleId="
+                + currentRuleId + "]";
     }
 
     public String getFlowId() {
@@ -100,7 +109,8 @@ public class Event {
         event.setEventId(this.getEventId());
         event.setModel(this.getModel());
         event.setFlowId(this.getFlowId());
-        event.getVars().putAll(this.getVars());
+        event.setCurrentRuleId(this.getCurrentRuleId());
+        event.getVariables().putAll(this.getVariables());
         return event;
     }
 }

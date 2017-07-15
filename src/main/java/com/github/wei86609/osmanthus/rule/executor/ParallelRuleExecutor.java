@@ -11,13 +11,12 @@ import org.apache.log4j.Logger;
 
 import com.github.wei86609.osmanthus.event.Event;
 import com.github.wei86609.osmanthus.event.ParallelEventListener;
-import com.github.wei86609.osmanthus.monitor.RuleInfo;
 import com.github.wei86609.osmanthus.rule.Line;
 import com.github.wei86609.osmanthus.rule.Parallel;
 import com.github.wei86609.osmanthus.rule.Rule;
 import com.github.wei86609.osmanthus.rule.Rule.TYPE;
 
-public class ParallelRuleExecutor extends CommonExecutor{
+public class ParallelRuleExecutor implements RuleExecutor{
 
     private final static Logger logger = Logger.getLogger(ParallelRuleExecutor.class);
 
@@ -25,8 +24,7 @@ public class ParallelRuleExecutor extends CommonExecutor{
 
     private ExecutorService threadPool;
 
-    @Override
-    public String run(Event event, Rule rule,RuleInfo ruleInfo) throws Exception {
+    public String execute(Event event, Rule rule) throws Exception {
         Parallel parallel=(Parallel)rule;
         logger.debug("Parallel["+parallel.getId()+"] of the event {"+event.getEventId()+"} has ["+parallel.getLines().size()+"] thread lines");
         List<Line> lines=parallel.getLines();
@@ -66,9 +64,14 @@ public class ParallelRuleExecutor extends CommonExecutor{
         return task;
     }
 
-    @Override
     public TYPE getType() {
         return TYPE.PARALLEL;
+    }
+
+    public void stop(){
+        if(threadPool!=null){
+            threadPool.shutdown();
+        }
     }
 
     public ExecutorService getThreadPool() {

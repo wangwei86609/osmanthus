@@ -30,7 +30,7 @@ public class Merge extends Rule{
         }else{
             Set<Entry<String,Event>> entries=allEvents.entrySet();
             for(Entry<String,Event> entry:entries){
-                event.getVars().putAll(entry.getValue().getVars());
+                event.getVariables().putAll(entry.getValue().getVariables());
             }
             allEvents.clear();
             return true;

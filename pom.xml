@@ -8,7 +8,7 @@
   </parent>
   <groupId>com.github.wangwei86609</groupId>
   <artifactId>osmanthus</artifactId>
-  <version>1.0.1.RELEASE</version>
+  <version>1.0.0.RELEASE</version>
   <packaging>jar</packaging>
 
   <name>osmanthus</name>

@@ -58,13 +58,13 @@ public class FlowEngineTest extends TestCase {
         Event event=new Event();
         event.setFlowId("singleflow1");
         event.setEventId("eventid");
-        event.add("salary", 5000);
-        event.add("weight", 500);
-        event.add("isBlackName", true);
-        event.add("fee", 500);
-        event.add("name", "test");
-        event.add("reg", "12312");
-        event.add("idNum", "350823198809122917");
+        event.addVar("salary", 5000);
+        event.addVar("weight", 500);
+        event.addVar("isBlackName", true);
+        event.addVar("fee", 500);
+        event.addVar("name", "test");
+        event.addVar("reg", "12312");
+        event.addVar("idNum", "350823198809122917");
         try {
             buildSingleThreadFlowEngine().execute(event);
 

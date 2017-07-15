@@ -69,13 +69,13 @@ public class Event {
         this.eventId = eventId;
     }
 
-    public void add(String key, Object value) {
+    public void addVar(String key, Object value) {
         if (!StringUtils.isEmpty(key)) {
             variables.put(key, value);
         }
     }
 
-    public Object get(String key) {
+    public Object getVar(String key) {
         if (!StringUtils.isEmpty(key)) {
             return variables.get(key);
         }

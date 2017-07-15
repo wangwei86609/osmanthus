@@ -46,10 +46,9 @@ public class FlowEngineTest extends TestCase {
         engine.addRuleExecutor(new EndNodeExecutor());
         engine.addRuleExecutor(ruleExecutor);
         // add RuleSetExcecutors
-        GeneralRuleSetHandler generalRuleSetHandler = new GeneralRuleSetHandler();
         GeneralRuleSetExecutor generalRuleSetExecutor = new GeneralRuleSetExecutor();
         generalRuleSetExecutor.setRuleExecutor(ruleExecutor);
-        generalRuleSetExecutor.addRuleSetHandler(generalRuleSetHandler);
+        generalRuleSetExecutor.addRuleSetHandler(new GeneralRuleSetHandler());
         engine.addRuleExecutor(generalRuleSetExecutor);
         return engine;
     }
@@ -69,7 +68,7 @@ public class FlowEngineTest extends TestCase {
         try {
             buildSingleThreadFlowEngine().execute(event);
 
-            System.out.println("================="+event);
+            System.out.println(""+event);
         } catch (Exception e) {
             e.printStackTrace();
         }

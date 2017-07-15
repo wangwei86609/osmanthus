@@ -72,7 +72,7 @@ public class FlowEngine{
             }
             if(StringUtils.isBlank(event.getCurrentRuleId())){
                 event.setCurrentRuleId(firstRule.getId());
-                logger.debug("Rule is blank, will get the first rule ["+firstRule.getId()+"] of flow to execute.");
+                logger.debug("Current rule is empty, will get the first rule ["+firstRule.getId()+"] of flow to execute.");
             }
             runFlowRule(event,event.getCurrentRuleId());
             //will trigger once the event complete
@@ -104,7 +104,7 @@ public class FlowEngine{
             beforeIntercepter(event, rule);
             //perform rule
             nextRuleId = ruleExecutorMap.get(rule.getType()).execute(event, rule);
-            logger.debug("Current rule["+rule.getId()+"]'s next rule id is["+nextRuleId+"]");
+            logger.debug("Current rule["+rule.getId()+"]'s next rule ["+nextRuleId+"]");
             //after intercepter
             afterIntercepter(event, rule);
         } catch (Exception e) {

@@ -2,7 +2,15 @@ package com.github.wei86609.osmanthus;
 
 import junit.framework.TestCase;
 
+import com.github.wei86609.osmanthus.event.DefaultEventListener;
 import com.github.wei86609.osmanthus.event.Event;
+import com.github.wei86609.osmanthus.rule.executor.EndNodeExecutor;
+import com.github.wei86609.osmanthus.rule.executor.MvelRuleExecutor;
+import com.github.wei86609.osmanthus.rule.executor.SplitRuleExecutor;
+import com.github.wei86609.osmanthus.rule.executor.StartNodeExecutor;
+import com.github.wei86609.osmanthus.rule.executor.ruleset.GeneralRuleSetExecutor;
+import com.github.wei86609.osmanthus.rule.handler.GeneralRuleSetHandler;
+import com.github.wei86609.osmanthus.rule.intercepter.DefaultIntercepter;
 
 public class FlowEngineTest extends TestCase {
 
@@ -24,28 +32,33 @@ public class FlowEngineTest extends TestCase {
         generalRuleSetExecutor.addRuleSetHandler(generalRuleSetHandler);
         osmanthus.addNodeExecutor(generalRuleSetExecutor);
         return osmanthus;
-    }
+    }*/
 
-    protected FlowEngine buildFlowEngine() {
-        FlowEngine osmanthus = new FlowEngine();
+    protected FlowEngine buildSingleThreadFlowEngine() {
+        FlowEngine engine = new FlowEngine();
+        //add event listener and intercepter
+        engine.addEventListener(new DefaultEventListener());
+        engine.addRuleInterceptor(new DefaultIntercepter());
         // add RuleExceutors
         MvelRuleExecutor ruleExecutor = new MvelRuleExecutor();
-        osmanthus.addNodeExecutor(new SplitRuleExecutor());
-        osmanthus.addNodeExecutor(new StartNodeExecutor());
-        osmanthus.addNodeExecutor(ruleExecutor);
+        engine.addRuleExecutor(new SplitRuleExecutor());
+        engine.addRuleExecutor(new StartNodeExecutor());
+        engine.addRuleExecutor(new EndNodeExecutor());
+        engine.addRuleExecutor(ruleExecutor);
         // add RuleSetExcecutors
         GeneralRuleSetHandler generalRuleSetHandler = new GeneralRuleSetHandler();
         GeneralRuleSetExecutor generalRuleSetExecutor = new GeneralRuleSetExecutor();
         generalRuleSetExecutor.setRuleExecutor(ruleExecutor);
         generalRuleSetExecutor.addRuleSetHandler(generalRuleSetHandler);
-        osmanthus.addNodeExecutor(generalRuleSetExecutor);
-        return osmanthus;
+        engine.addRuleExecutor(generalRuleSetExecutor);
+        return engine;
     }
-*/
+
 
     public void testExecute() {
         Event event=new Event();
         event.setFlowId("singleflow1");
+        event.setEventId("eventid");
         event.add("salary", 5000);
         event.add("weight", 500);
         event.add("isBlackName", true);
@@ -53,6 +66,7 @@ public class FlowEngineTest extends TestCase {
         event.add("name", "test");
         event.add("reg", "12312");
         try {
+            buildSingleThreadFlowEngine().execute(event);
         } catch (Exception e) {
             e.printStackTrace();
         }

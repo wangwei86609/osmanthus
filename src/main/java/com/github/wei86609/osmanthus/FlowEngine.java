@@ -40,6 +40,10 @@ public class FlowEngine{
         }
     }
 
+    public void addEventListener(EventListener eventListener){
+        eventListeners.add(eventListener);
+    }
+
     public void addRuleInterceptor(Intercepter ruleIntercepter){
         ruleIntercepters.add(ruleIntercepter);
     }
@@ -88,17 +92,26 @@ public class FlowEngine{
         if(rule==null){
             return;
         }
+        event.setCurrentRuleId(ruleId);
+        String nextRuleId = performRule(event, rule);
+        runFlowRule(event,nextRuleId);
+    }
+
+    private String performRule(Event event, Rule rule) throws Exception {
+        String nextRuleId=null;
         try {
-            event.setCurrentRuleId(ruleId);
+            //before intercepter
             beforeIntercepter(event, rule);
-            String nextRuleId= ruleExecutorMap.get(rule.getType()).execute(event, rule);
-            logger.debug("Current rule["+ruleId+"]'s next rule id is["+nextRuleId+"]");
+            //perform rule
+            nextRuleId = ruleExecutorMap.get(rule.getType()).execute(event, rule);
+            logger.debug("Current rule["+rule.getId()+"]'s next rule id is["+nextRuleId+"]");
+            //after intercepter
             afterIntercepter(event, rule);
-            runFlowRule(event,nextRuleId);
         } catch (Exception e) {
             exceptionIntercepter(event, rule, e);
             throw e;
         }
+        return nextRuleId;
     }
 
     private void exceptionEvent(Event event, Exception e) {
@@ -150,8 +163,8 @@ public class FlowEngine{
         }
     }
 
-    private Rule getRuleOfFlowById(Event event, String nodeId) throws Exception {
-        return ConfigurationBuilder.getBuilder().getRuleByFlow(event.getFlowId(), nodeId);
+    private Rule getRuleOfFlowById(Event event, String ruleId) throws Exception {
+        return ConfigurationBuilder.getBuilder().getRuleByFlow(event.getFlowId(), ruleId);
     }
 
     public void runSingleRule(Event event,String ruleId)throws Exception{
@@ -165,16 +178,11 @@ public class FlowEngine{
         try {
             //will trigger once the event initial
             initEvent(event);
-            //set current rule id
             event.setCurrentRuleId(ruleId);
-            beforeIntercepter(event, rule);
-            String nextRuleId= ruleExecutorMap.get(rule.getType()).execute(event, rule);
-            logger.debug("Current rule["+ruleId+"]'s next rule id is["+nextRuleId+"]");
-            afterIntercepter(event, rule);
+            performRule(event,rule);
             //will trigger once the event complete
             completeEvent(event);
         } catch (Exception e) {
-            exceptionIntercepter(event, rule, e);
             exceptionEvent(event, e);
             throw e;
         }
@@ -191,16 +199,11 @@ public class FlowEngine{
         try {
             //will trigger once the event initial
             initEvent(event);
-            //set current rule id
             event.setCurrentRuleId(ruleId);
-            beforeIntercepter(event, rule);
-            String nextRuleId= ruleExecutorMap.get(rule.getType()).execute(event, rule);
-            logger.debug("Current rule["+ruleId+"]'s next rule id is["+nextRuleId+"]");
-            afterIntercepter(event, rule);
+            performRule(event,rule);
             //will trigger once the event complete
             completeEvent(event);
         } catch (Exception e) {
-            exceptionIntercepter(event, rule, e);
             exceptionEvent(event, e);
             throw e;
         }

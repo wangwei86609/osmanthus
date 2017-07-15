@@ -30,7 +30,7 @@ public class GeneralRuleSetExecutor implements RuleExecutor{
                 ruleSetHandler.handle(ruleSet);
             }
         }
-        logger.debug("The ruleset["+ruleSet.getId()+"] of the event{"+event+"} has ["+ruleSet.getRules().size()+"] rules");
+        logger.debug("The ruleset["+ruleSet.getId()+"] of the event{"+event.getEventId()+"} has ["+ruleSet.getRules().size()+"] rules");
         run(event,ruleSet.getRules());
         return ruleSet.getToRuleId();
     }

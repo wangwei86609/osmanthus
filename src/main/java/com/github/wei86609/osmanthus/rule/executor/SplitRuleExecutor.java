@@ -18,7 +18,7 @@ public class SplitRuleExecutor implements RuleExecutor{
         Split split=(Split)rule;
         for(Constraint c:split.getConstraints()){
             if(executeCondition(c.getCondition(),event)){
-                logger.debug("In the event ["+event.getEventId()+"],  the result of condition ["+c.getCondition()+"] is [true] of the plit["+split.getId()+"], will link to rule["+c.getToRuleId()+"].");
+                logger.debug("In the event ["+event.getEventId()+"],  the result of condition ["+c.getCondition()+"] = [true] of the plit["+split.getId()+"], will link to rule["+c.getToRuleId()+"].");
                 return c.getToRuleId();
             }
         }

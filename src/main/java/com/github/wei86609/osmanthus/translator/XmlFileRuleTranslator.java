@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.github.wei86609.osmanthus.rule.Flow;
 import com.github.wei86609.osmanthus.rule.Rule;
-import com.github.wei86609.osmanthus.rule.executor.ruleset.GeneralRuleSetExecutor;
 
 public class XmlFileRuleTranslator extends RuleTranslator{
 
@@ -91,7 +90,7 @@ public class XmlFileRuleTranslator extends RuleTranslator{
     private File[] findFile(final String folder,final String folderName,final String fileExtension) {
         File file=null;
         if(StringUtils.isEmpty(folder)){
-            URL url=GeneralRuleSetExecutor.class.getClassLoader().getResource(folderName);
+            URL url=XmlFileRuleTranslator.class.getClassLoader().getResource(folderName);
             file = new File(url.getFile());
         }else{
             file=new File(folder);

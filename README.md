@@ -1,5 +1,5 @@
 ## What is the Osmanthus?
-Osmanthus is a framework for rules & flow engines, a lightweight library and based on MVEL library. It is more convenient than drools, developers define rules & flows with XML file, it supplies below useful XML node:
+Osmanthus is a framework for rules engines, a lightweight library and based on MVEL library. It is more convenient than drools, developers define rules & flows with XML file, it supplies below useful XML node:
 ### Rule node
 
 * rule: a single rule

@@ -2,9 +2,9 @@ package com.github.wei86609.osmanthus.utils;
 
 
 import com.github.wei86609.osmanthus.rule.*;
-import com.github.wei86609.osmanthus.rule.ds.Interface;
-import com.github.wei86609.osmanthus.rule.ds.arg.Arg;
-import com.github.wei86609.osmanthus.rule.ds.arg.InArg;
+import com.github.wei86609.osmanthus.ds.Interface;
+import com.github.wei86609.osmanthus.ds.arg.Arg;
+import com.github.wei86609.osmanthus.ds.arg.InArg;
 import com.thoughtworks.xstream.XStream;
 
 public abstract class XstreamUtils {

@@ -1,6 +1,6 @@
 package com.github.wei86609.osmanthus.rule;
 
-import com.github.wei86609.osmanthus.rule.ds.DataSource;
+import com.github.wei86609.osmanthus.ds.DataSource;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;

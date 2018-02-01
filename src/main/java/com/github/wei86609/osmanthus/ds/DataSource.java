@@ -2,7 +2,7 @@
  * Copyright (c) 2017 PaiPai Credit Data Services (Shanghai) Co., Ltd All Rights Reserved.
  */
 
-package com.github.wei86609.osmanthus.rule.ds;
+package com.github.wei86609.osmanthus.ds;
 
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 

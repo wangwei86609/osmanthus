@@ -1,18 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
@@ -21,7 +10,7 @@
     <groupId>com.github.wangwei86609</groupId>
     <artifactId>osmanthus</artifactId>
     <version>1.0.0.RELEASE</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>osmanthus</name>
     <url>http://maven.apache.org</url>
@@ -44,6 +33,7 @@
         <connection>git@github.com:wangwei86609/osmanthus.git</connection>
         <developerConnection>wangwei86609@163.com</developerConnection>
     </scm>
+
     <developers>
         <developer>
             <name>wei</name>
@@ -51,6 +41,24 @@
             <url>wangwei86609@163.com</url>
         </developer>
     </developers>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <modules>
+        <module>osmanthus-core</module>
+        <module>osmanthus-examples</module>
+    </modules>
+    <dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.mvel</groupId>
@@ -111,4 +119,5 @@
             <version>${logback.version}</version>
         </dependency>
     </dependencies>
+    </dependencyManagement>
 </project>

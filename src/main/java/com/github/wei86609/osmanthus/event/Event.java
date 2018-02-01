@@ -1,93 +1,138 @@
 package com.github.wei86609.osmanthus.event;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
 
 public class Event {
 
-    public enum MODEL{
-        FIRST,LAST,WEIGHT
+    public static final String RULE_SCORE = "ruleScore";
+
+    public static final String WEIGHT_SCORE_SUFFIX = "_weightScore";
+
+    public static final String WEIGHT_SCORE = "weightScore";
+
+    public Event() {
+        this.variables.put(WEIGHT_SCORE, 0);
     }
 
     private final Map<String, Object> variables = new HashMap<String, Object>();
 
-    private final List<Event> subEvents=new ArrayList<Event>();
+    private final Set<String> convertVars = new HashSet<String>();
 
-    private String eventId;
+    private final List<Event> subEvents = new ArrayList<Event>();
 
-    private String flowId;
+    private String id;
 
-    private String flowName;
+    private String appKey;
+
+    private String appSecret;
+
+    private String strategyId;
+
+    private String version;
+
+    private String strategyName;
+
+    private String isMock;
+
+    private String isTest;
 
     private long startTime;
 
     private long endTime;
 
-    private MODEL model=MODEL.FIRST;
-
     private boolean error;
 
     private String currentRuleId;
 
+    private String dateFormat = "yyyy-MM-dd HH:mm:ss";
+
+    private String userId;
+
+    public String getIsTest() {
+        return this.isTest;
+    }
+
+    public void setIsTest(String isTest) {
+        this.isTest = isTest;
+    }
+
+    public String getDateFormat() {
+        return this.dateFormat;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
+    }
+
+    public String getAppKey() {
+        return this.appKey;
+    }
+
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
+    }
+
+    public String getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public List<Event> getSubEvents() {
-        return subEvents;
+        return this.subEvents;
     }
 
-    public void addSubEvent(Event subEvent){
-        subEvents.add(subEvent);
-    }
-
-    public boolean canRunNextNode(){
-        return (MODEL.FIRST.equals(model) && error)?false:true;
+    public void addSubEvent(Event subEvent) {
+        this.subEvents.add(subEvent);
     }
 
     public boolean isError() {
-        return error;
+        return this.error;
     }
 
     public void setError(boolean error) {
         this.error = error;
     }
 
-    public MODEL getModel() {
-        return model;
+    public String getId() {
+        return this.id;
     }
 
-    public void setModel(MODEL model) {
-        this.model = model;
-    }
-
-    public String getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void addVar(String key, Object value) {
         if (!StringUtils.isEmpty(key)) {
-            variables.put(key, value);
+            this.variables.put(key, value);
         }
     }
 
     public Object getVar(String key) {
         if (!StringUtils.isEmpty(key)) {
-            return variables.get(key);
+            return this.variables.get(key);
         }
         return null;
     }
 
+    public String getIsMock() {
+        return this.isMock;
+    }
+
+    public void setIsMock(String isMock) {
+        this.isMock = isMock;
+    }
+
     public Map<String, Object> getVariables() {
-        return variables;
+        return this.variables;
     }
 
     public String getCurrentRuleId() {
-        return currentRuleId;
+        return this.currentRuleId;
     }
 
     public void setCurrentRuleId(String currentRuleId) {
@@ -95,7 +140,7 @@ public class Event {
     }
 
     public long getStartTime() {
-        return startTime;
+        return this.startTime;
     }
 
     public void setStartTime(long startTime) {
@@ -103,48 +148,65 @@ public class Event {
     }
 
     public long getEndTime() {
-        return endTime;
+        return this.endTime;
     }
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 
-    public String getFlowName() {
-        return flowName;
+    public String getStrategyId() {
+        return this.strategyId;
     }
 
-    public void setFlowName(String flowName) {
-        this.flowName = flowName;
+    public void setStrategyId(String strategyId) {
+        this.strategyId = strategyId;
     }
 
-    @Override
-    public String toString() {
-        return "Event [variables=" + variables + ", subEvents=" + subEvents
-                + ", eventId=" + eventId + ", flowId=" + flowId + ", flowName="
-                + flowName + ", startTime=" + startTime + ", endTime="
-                + endTime + ", model=" + model + ", error=" + error
-                + ", currentRuleId=" + currentRuleId + "]";
+    public String getStrategyName() {
+        return this.strategyName;
     }
 
-    public String getFlowId() {
-        return flowId;
+    public void setStrategyName(String strategyName) {
+        this.strategyName = strategyName;
     }
 
-    public void setFlowId(String flowId) {
-        this.flowId = flowId;
+    public String getVersion() {
+        return this.version;
     }
 
-    public Event copy(){
-        Event event=new Event();
-        event.setEventId(this.getEventId());
-        event.setModel(this.getModel());
-        event.setFlowId(this.getFlowId());
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getAppSecret() {
+        return this.appSecret;
+    }
+
+    public void setAppSecret(String appSecret) {
+        this.appSecret = appSecret;
+    }
+
+    public Event copy() {
+        Event event = new Event();
+        event.setId(this.getId());
+        event.setStrategyId(this.strategyId);
         event.setCurrentRuleId(this.getCurrentRuleId());
         event.setStartTime(this.startTime);
         event.setEndTime(this.endTime);
-        event.setFlowName(this.flowName);
+        event.setStrategyName(this.strategyName);
+        event.setAppKey(this.appKey);
+        event.setAppSecret(this.appSecret);
+        event.setUserId(this.userId);
+        event.setVersion(this.version);
+        event.setIsMock(this.isMock);
+        event.setIsTest(this.isTest);
+        event.setDateFormat(this.dateFormat);
         event.getVariables().putAll(this.getVariables());
         return event;
+    }
+
+    public Set<String> getConvertVars() {
+        return this.convertVars;
     }
 }

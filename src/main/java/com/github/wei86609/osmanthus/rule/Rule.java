@@ -1,15 +1,21 @@
 package com.github.wei86609.osmanthus.rule;
 
+import com.github.wei86609.osmanthus.rule.ds.DataSource;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
+import java.util.List;
+import java.util.Set;
 
 @XStreamAlias("rule")
-public class Rule{
-    public enum TYPE {
-        START,RULE,SPLIT,SET,CARD,PARALLEL,MERGE,END
+public class Rule {
+    public enum RuleType {
+        START, RULE, SPLIT, SET, CARD, PARALLEL, MERGE, END, STATISTICS_COUNT, HTTP, METHOD
     }
 
-    private TYPE type;
+    @XStreamOmitField
+    private RuleType type;
 
     @XStreamAsAttribute
     private String id;
@@ -18,87 +24,66 @@ public class Rule{
     private String name;
 
     @XStreamAsAttribute
+    private String code;
+
+    @XStreamAsAttribute
     private String fromRuleId;
 
     @XStreamAsAttribute
     private String toRuleId;
 
-    @XStreamAsAttribute
-    private String description;
+    @XStreamOmitField
+    private Integer timeout;
 
-    @XStreamAsAttribute
-    private int timeout;
+    @XStreamOmitField
+    private Integer priority;
 
-    @XStreamAsAttribute
-    private boolean external;
+    @XStreamOmitField
+    private Integer multipleTimes = 0;
 
-    @XStreamAsAttribute
-    private int priority;
+    @XStreamOmitField
+    private Boolean valid = true;
 
-    @XStreamAsAttribute
-    private String title;
+    private Boolean isPilotRun;
 
-    @XStreamAsAttribute
-    private boolean exclusive;
+    private String matchedPattern;
 
-    @XStreamAsAttribute
-    private int multipleTimes;
+    @XStreamOmitField
+    private Double riskScore;
 
-    @XStreamAsAttribute
-    private boolean valid=true;
+    @XStreamOmitField
+    private Double ruleScore;
 
-    private String condition;
+    @XStreamOmitField
+    private Long startTime;
 
-    private String action;
+    @XStreamOmitField
+    private Long endTime;
 
-    private String resultOfCondition;
+    @XStreamOmitField
+    private Boolean error;
 
-    private long startTime;
+    @XStreamOmitField
+    private String errorMsg;
 
-    private long endTime;
+    @XStreamOmitField
+    private String errorCode;
 
-    public String getResultOfCondition() {
-        return resultOfCondition;
-    }
+    @XStreamOmitField
+    private Boolean isHit;
 
-    public void setResultOfCondition(String resultOfCondition) {
-        this.resultOfCondition = resultOfCondition;
-    }
+    private List<Vocabulary> vocabularies;
 
-    public long getStartTime() {
-        return startTime;
-    }
+    private List<Condition> conditions;
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
-    }
+    private List<Action> actions;
 
-    public long getEndTime() {
-        return endTime;
-    }
+    private List<Kpi> kpis;
 
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getFromRuleId() {
-        return fromRuleId;
-    }
-
-    public void setFromRuleId(String fromRuleId) {
-        this.fromRuleId = fromRuleId;
-    }
-
-    public String getToRuleId() {
-        return toRuleId;
-    }
-
-    public void setToRuleId(String toRuleId) {
-        this.toRuleId = toRuleId;
-    }
+    private Set<DataSource> dataSources;
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(String id) {
@@ -106,111 +91,191 @@ public class Rule{
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getFromRuleId() {
+        return this.fromRuleId;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setFromRuleId(String fromRuleId) {
+        this.fromRuleId = fromRuleId;
     }
 
-    public int getTimeout() {
-        return timeout;
+    public String getToRuleId() {
+        return this.toRuleId;
     }
 
-    public void setTimeout(int timeout) {
+    public void setToRuleId(String toRuleId) {
+        this.toRuleId = toRuleId;
+    }
+
+    public Integer getTimeout() {
+        return this.timeout;
+    }
+
+    public void setTimeout(Integer timeout) {
         this.timeout = timeout;
     }
 
-    public boolean isExternal() {
-        return external;
+    public Integer getPriority() {
+        return this.priority;
     }
 
-    public void setExternal(boolean external) {
-        this.external = external;
-    }
-
-
-    public void setType(TYPE type) {
-        this.type = type;
-    }
-
-
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String condition) {
-        this.condition = condition;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
+    public void setPriority(Integer priority) {
         this.priority = priority;
     }
 
-    public String getTitle() {
-        return title;
+    public Integer getMultipleTimes() {
+        return this.multipleTimes;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean isExclusive() {
-        return exclusive;
-    }
-
-    public void setExclusive(boolean exclusive) {
-        this.exclusive = exclusive;
-    }
-
-    public int getMultipleTimes() {
-        return multipleTimes;
-    }
-
-    public void setMultipleTimes(int multipleTimes) {
+    public void setMultipleTimes(Integer multipleTimes) {
         this.multipleTimes = multipleTimes;
     }
 
-    public boolean isValid() {
-        return valid;
+    public Boolean getValid() {
+        return this.valid;
     }
 
-    public void setValid(boolean valid) {
+    public void setValid(Boolean valid) {
         this.valid = valid;
     }
 
-    public TYPE getType() {
-        return TYPE.RULE;
+    public Boolean getIsPilotRun() {
+        return this.isPilotRun;
     }
 
-    @Override
-    public String toString() {
-        return "Rule [type=" + type + ", id=" + id + ", name=" + name
-                + ", fromRuleId=" + fromRuleId + ", toRuleId=" + toRuleId
-                + ", description=" + description + ", timeout=" + timeout
-                + ", external=" + external + ", priority=" + priority
-                + ", title=" + title + ", exclusive=" + exclusive
-                + ", multipleTimes=" + multipleTimes + ", valid=" + valid
-                + ", condition=" + condition + ", action=" + action + "]";
+    public void setIsPilotRun(Boolean isPilotRun) {
+        this.isPilotRun = isPilotRun;
     }
+
+    public String getMatchedPattern() {
+        return this.matchedPattern;
+    }
+
+    public void setMatchedPattern(String matchedPattern) {
+        this.matchedPattern = matchedPattern;
+    }
+
+    public Long getStartTime() {
+        return this.startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Long getEndTime() {
+        return this.endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
+    }
+
+    public Boolean getError() {
+        return this.error;
+    }
+
+    public void setError(Boolean error) {
+        this.error = error;
+    }
+
+    public String getErrorMsg() {
+        return this.errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
+
+    public Boolean getIsHit() {
+        return this.isHit;
+    }
+
+    public void setIsHit(Boolean isHit) {
+        this.isHit = isHit;
+    }
+
+    public List<Vocabulary> getVocabularies() {
+        return this.vocabularies;
+    }
+
+    public void setVocabularies(List<Vocabulary> vocabularies) {
+        this.vocabularies = vocabularies;
+    }
+
+    public List<Condition> getConditions() {
+        return this.conditions;
+    }
+
+    public void setConditions(List<Condition> conditions) {
+        this.conditions = conditions;
+    }
+
+    public List<Action> getActions() {
+        return this.actions;
+    }
+
+    public void setActions(List<Action> actions) {
+        this.actions = actions;
+    }
+
+    public List<Kpi> getKpis() {
+        return this.kpis;
+    }
+
+    public void setKpis(List<Kpi> kpis) {
+        this.kpis = kpis;
+    }
+
+    public RuleType getType() {
+        return RuleType.RULE;
+    }
+
+    public Double getRiskScore() {
+        return this.riskScore;
+    }
+
+    public void setRiskScore(Double riskScore) {
+        this.riskScore = riskScore;
+    }
+
+    public Double getRuleScore() {
+        return this.ruleScore;
+    }
+
+    public void setRuleScore(Double ruleScore) {
+        this.ruleScore = ruleScore;
+    }
+
+    public Set<DataSource> getDataSources() {
+        return this.dataSources;
+    }
+
+    public void setDataSources(Set<DataSource> dataSources) {
+        this.dataSources = dataSources;
+    }
+
+    public String getErrorCode() {
+        return this.errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public String getCode() {
+        return this.code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
 }

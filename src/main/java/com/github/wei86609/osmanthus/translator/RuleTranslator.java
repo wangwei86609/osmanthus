@@ -1,20 +1,12 @@
 package com.github.wei86609.osmanthus.translator;
 
+import com.github.wei86609.osmanthus.rule.*;
+import com.thoughtworks.xstream.XStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Map;
-
-import com.github.wei86609.osmanthus.rule.Constraint;
-import com.github.wei86609.osmanthus.rule.End;
-import com.github.wei86609.osmanthus.rule.Flow;
-import com.github.wei86609.osmanthus.rule.Merge;
-import com.github.wei86609.osmanthus.rule.Parallel;
-import com.github.wei86609.osmanthus.rule.Rule;
-import com.github.wei86609.osmanthus.rule.Split;
-import com.github.wei86609.osmanthus.rule.Start;
-import com.github.wei86609.osmanthus.rule.ruleset.RuleSet;
-import com.thoughtworks.xstream.XStream;
 
 public abstract class RuleTranslator{
 

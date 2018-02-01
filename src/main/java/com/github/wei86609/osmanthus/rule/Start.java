@@ -3,7 +3,7 @@ package com.github.wei86609.osmanthus.rule;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("start")
-public class Start extends Rule{
+public class Start extends Rule {
 
     @Override
     public String getFromRuleId() {
@@ -11,7 +11,12 @@ public class Start extends Rule{
     }
 
     @Override
-    public TYPE getType() {
-        return TYPE.START;
+    public String getId() {
+        return "start";
+    }
+
+    @Override
+    public RuleType getType() {
+        return RuleType.START;
     }
 }
